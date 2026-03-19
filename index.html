@@ -340,7 +340,7 @@
     .section-header { margin-bottom: 56px; }
 
     /* ===== SERVICES ===== */
-    #services { background: var(--bg); }
+    #services { background: var(--bg-alt); }
     .services-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -393,7 +393,7 @@
     }
 
     /* ===== PORTFOLIO ===== */
-    #portfolio { background: var(--bg-alt); }
+    #portfolio { background: var(--bg); }
     .portfolio-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -565,7 +565,7 @@
     .lightbox-info p { color: rgba(255,255,255,0.7); font-size: 0.85rem; }
 
     /* ===== PROCESS ===== */
-    #process { background: var(--bg); }
+    #process { background: var(--bg-alt); }
     .process-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -589,23 +589,23 @@
     .process-step::before {
       content: counter(step, decimal-leading-zero);
       font-family: 'Outfit', sans-serif;
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: 700;
       background: var(--gradient-text);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      opacity: 0.2;
+      opacity: 0.25;
       display: block;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
     .process-step h3 {
       font-family: 'Outfit', sans-serif;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 600;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
-    .process-step p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.7; }
+    .process-step p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; }
 
     /* ===== CTA ===== */
     .cta-section {
@@ -613,7 +613,7 @@
       text-align: center;
       position: relative;
       overflow: hidden;
-      background: var(--bg-alt);
+      background: var(--bg);
     }
     .cta-bg {
       position: absolute;
