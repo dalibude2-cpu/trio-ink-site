@@ -3,31 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>trio.ink — AI-powered Digital Agency</title>
-  <meta name="description" content="AI-контент нового покоління: відео, фото, SMM для брендів, які хочуть виділятися.">
+  <title>aivory — creative ai agency</title>
+  <meta name="description" content="Креативне AI-агентство нового покоління: відео, фото, SMM для брендів, які хочуть виділятися.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #faf6f0;
-      --bg-alt: #f3ede4;
-      --bg-card: #ffffff;
-      --bg-card-hover: #fefcf9;
-      --text: #1a1510;
-      --text-muted: #7a7068;
-      --accent: #7c3aed;
-      --accent2: #d97706;
-      --gradient: linear-gradient(135deg, #7c3aed, #d97706);
-      --gradient-text: linear-gradient(135deg, #7c3aed, #c96d06);
-      --border: rgba(26, 21, 16, 0.08);
-      --border-hover: rgba(124, 58, 237, 0.25);
-      --shadow-sm: 0 1px 3px rgba(26, 21, 16, 0.04);
-      --shadow-md: 0 4px 20px rgba(26, 21, 16, 0.06);
-      --shadow-lg: 0 8px 40px rgba(26, 21, 16, 0.08);
+      --bg: #F8F4EC;
+      --bg-alt: #F0EBE1;
+      --bg-card: #FDFCF9;
+      --bg-card-hover: #F8F4EC;
+      --text: #1C1914;
+      --text-muted: #8C8278;
+      --accent: #8C7E6F;
+      --accent2: #6B5B4E;
+      --gradient: linear-gradient(135deg, #8C7E6F, #6B5B4E);
+      --gradient-text: linear-gradient(135deg, #8C7E6F, #5A4D42);
+      --border: rgba(28, 25, 20, 0.08);
+      --border-hover: rgba(140, 126, 111, 0.3);
+      --shadow-sm: 0 1px 3px rgba(28, 25, 20, 0.04);
+      --shadow-md: 0 4px 20px rgba(28, 25, 20, 0.06);
+      --shadow-lg: 0 8px 40px rgba(28, 25, 20, 0.08);
       --radius: 16px;
+      --strip-height: 90px;
     }
 
     html { scroll-behavior: smooth; font-size: 16px; }
@@ -48,7 +49,7 @@
     a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; }
     .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-    section { padding: 120px 0; position: relative; }
+    section { padding: 100px 0; position: relative; scroll-margin-top: calc(var(--strip-height) + 40px); }
 
     /* ===== SUBTLE GRAIN ===== */
     body::before {
@@ -60,36 +61,129 @@
       z-index: 9999;
     }
 
+    /* ===== PREVIEW STRIP ===== */
+    .preview-strip {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1100;
+      height: var(--strip-height);
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .preview-strip-track {
+      display: flex;
+      gap: 12px;
+      padding: 0 16px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      height: 100%;
+      align-items: center;
+    }
+    .preview-strip-track::-webkit-scrollbar { display: none; }
+
+    .preview-card {
+      flex: 0 0 auto;
+      width: 100px;
+      height: 64px;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+    }
+    .preview-card:hover {
+      transform: scale(1.05);
+      box-shadow: var(--shadow-md);
+    }
+    .preview-strip-track.dragging {
+      cursor: grabbing;
+      scroll-behavior: auto;
+    }
+    .preview-strip-track.dragging .preview-card {
+      pointer-events: none;
+    }
+
+    /* Strip arrows */
+    .strip-arrow {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 28px;
+      z-index: 3;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+    .preview-strip:hover .strip-arrow { opacity: 1; }
+    .strip-arrow-left {
+      left: 0;
+      background: linear-gradient(90deg, var(--bg-alt) 60%, transparent);
+    }
+    .strip-arrow-right {
+      right: 0;
+      background: linear-gradient(270deg, var(--bg-alt) 60%, transparent);
+    }
+    .strip-arrow:hover { color: var(--text); }
+    .preview-card img,
+    .preview-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Film strip styling for video previews */
+    .preview-card.film-strip {
+      border-radius: 4px;
+      border: none;
+      position: relative;
+    }
+    .preview-card.film-strip::before,
+    .preview-card.film-strip::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 8px;
+      z-index: 2;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8'%3E%3Crect width='14' height='8' fill='%231C1914'/%3E%3Crect x='4' y='2' width='4' height='4' rx='0.5' fill='%23F0EBE1'/%3E%3C/svg%3E") repeat-x;
+    }
+    .preview-card.film-strip::before { top: 0; }
+    .preview-card.film-strip::after { bottom: 0; }
+
     /* ===== NAVBAR ===== */
     .navbar {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: var(--strip-height);
+      left: 0; right: 0;
       z-index: 1000;
-      padding: 20px 0;
+      padding: 16px 0;
       transition: all 0.4s ease;
-    }
-    .navbar.scrolled {
-      padding: 12px 0;
-      background: rgba(250, 246, 240, 0.9);
+      background: rgba(248, 244, 236, 0.85);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
-    .navbar .container { display: flex; align-items: center; justify-content: space-between; }
-    .logo {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+    .navbar.scrolled {
+      padding: 10px 0;
     }
-    .logo span {
-      background: var(--gradient-text);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+    .logo-img {
+      height: 44px;
+      width: auto;
     }
     .nav-links { display: flex; gap: 32px; align-items: center; }
     .nav-links a {
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       font-weight: 500;
       color: var(--text-muted);
       transition: color 0.3s;
@@ -115,8 +209,8 @@
       gap: 2px;
     }
     .lang-switch button {
-      padding: 6px 14px;
-      font-size: 0.75rem;
+      padding: 5px 12px;
+      font-size: 0.7rem;
       font-weight: 600;
       border: none;
       border-radius: 50px;
@@ -136,7 +230,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 12px 28px;
+      padding: 14px 32px;
       background: var(--gradient);
       color: #fff;
       font-size: 0.875rem;
@@ -148,13 +242,13 @@
     }
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(124, 58, 237, 0.3);
+      box-shadow: 0 8px 30px rgba(140, 126, 111, 0.3);
     }
     .btn-outline {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 12px 28px;
+      padding: 14px 32px;
       background: transparent;
       color: var(--text);
       font-size: 0.875rem;
@@ -166,7 +260,7 @@
     }
     .btn-outline:hover {
       border-color: var(--accent);
-      background: rgba(124, 58, 237, 0.05);
+      background: rgba(140, 126, 111, 0.05);
     }
 
     .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
@@ -177,7 +271,10 @@
       min-height: 100vh;
       display: flex;
       align-items: center;
-      padding-top: 100px;
+      justify-content: center;
+      text-align: center;
+      padding-top: calc(var(--strip-height) + 80px);
+      padding-bottom: 80px;
       position: relative;
       overflow: hidden;
     }
@@ -186,77 +283,32 @@
       width: 600px; height: 600px;
       border-radius: 50%;
       filter: blur(150px);
-      opacity: 0.08;
+      opacity: 0.06;
       pointer-events: none;
     }
-    .hero-bg-glow.g1 { top: -100px; right: -100px; background: #7c3aed; }
-    .hero-bg-glow.g2 { bottom: -200px; left: -200px; background: #d97706; }
-    .hero-content { position: relative; z-index: 2; }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: rgba(124, 58, 237, 0.06);
-      border: 1px solid rgba(124, 58, 237, 0.12);
-      border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--accent);
-      margin-bottom: 32px;
+    .hero-bg-glow.g1 { top: -100px; right: -100px; background: #8C7E6F; }
+    .hero-bg-glow.g2 { bottom: -200px; left: -200px; background: #6B5B4E; }
+    .hero-content { position: relative; z-index: 2; max-width: 700px; }
+    .hero-logo-img {
+      width: clamp(300px, 45vw, 520px);
+      height: auto;
+      margin: 0 auto 36px;
       animation: fadeInUp 0.8s ease forwards;
     }
-    .hero-badge .dot {
-      width: 8px; height: 8px;
-      background: #22c55e;
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
     .hero h1 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(3rem, 7vw, 5.5rem);
-      font-weight: 800;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-      margin-bottom: 28px;
-      animation: fadeInUp 0.8s 0.15s ease both;
-    }
-    .hero h1 .gradient-word {
-      background: var(--gradient-text);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero-description {
-      font-size: 1.15rem;
-      color: var(--text-muted);
-      max-width: 540px;
-      line-height: 1.7;
-      margin-bottom: 40px;
-      animation: fadeInUp 0.8s 0.3s ease both;
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 500;
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+      margin-bottom: 36px;
+      color: var(--text);
+      animation: fadeInUp 0.8s 0.2s ease both;
     }
     .hero-buttons {
-      display: flex; gap: 16px; flex-wrap: wrap;
-      animation: fadeInUp 0.8s 0.45s ease both;
+      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+      animation: fadeInUp 0.8s 0.4s ease both;
     }
-    .hero-stats {
-      display: flex; gap: 48px;
-      margin-top: 72px; padding-top: 40px;
-      border-top: 1px solid var(--border);
-      animation: fadeInUp 0.8s 0.6s ease both;
-    }
-    .stat-number {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.5rem;
-      font-weight: 700;
-      background: var(--gradient-text);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
 
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(30px); }
@@ -269,39 +321,36 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.15em;
-      background: var(--gradient-text);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--accent);
       margin-bottom: 16px;
     }
     .section-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2rem, 4vw, 3rem);
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
       font-weight: 700;
       letter-spacing: -0.02em;
       margin-bottom: 20px;
     }
     .section-subtitle {
-      font-size: 1.05rem;
+      font-size: 1rem;
       color: var(--text-muted);
       max-width: 560px;
       line-height: 1.7;
     }
-    .section-header { margin-bottom: 64px; }
+    .section-header { margin-bottom: 56px; }
 
     /* ===== SERVICES ===== */
-    #services { background: var(--bg-alt); }
+    #services { background: var(--bg); }
     .services-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      gap: 20px;
     }
     .service-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 40px 32px;
+      padding: 32px 24px;
       transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
@@ -323,65 +372,39 @@
     }
     .service-card:hover::before { opacity: 1; }
     .service-icon {
-      width: 56px; height: 56px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(217,119,6,0.08));
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(140,126,111,0.1), rgba(107,91,78,0.08));
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     .service-card h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.25rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
       font-weight: 600;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .service-card p {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
       line-height: 1.7;
     }
 
     /* ===== PORTFOLIO ===== */
-    .portfolio-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 40px;
-    }
-    .portfolio-tab {
-      padding: 10px 24px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      border-radius: 50px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.3s;
-      font-family: 'Inter', sans-serif;
-    }
-    .portfolio-tab.active {
-      background: var(--text);
-      color: var(--bg);
-      border-color: var(--text);
-    }
-    .portfolio-tab:hover:not(.active) {
-      border-color: var(--text-muted);
-      color: var(--text);
-    }
-
+    #portfolio { background: var(--bg-alt); }
     .portfolio-grid {
       display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 20px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
     }
     .portfolio-item {
       position: relative;
-      border-radius: var(--radius);
+      border-radius: 10px;
       overflow: hidden;
       cursor: pointer;
-      aspect-ratio: 16/10;
+      aspect-ratio: 4/3;
       background: var(--bg-card);
       border: 1px solid var(--border);
       box-shadow: var(--shadow-sm);
@@ -391,49 +414,36 @@
       box-shadow: var(--shadow-lg);
       transform: translateY(-4px);
     }
-    .portfolio-item.hidden {
-      display: none;
+
+    /* Film strip for video items in portfolio */
+    .portfolio-item.film-frame {
+      border-radius: 4px;
+      border: none;
+      background: #1C1914;
+      padding: 10px 0;
     }
-
-    /* Image items layout */
-    .portfolio-item[data-type="image"]:nth-of-type(1) { grid-column: span 7; }
-    .portfolio-item[data-type="image"]:nth-of-type(2) { grid-column: span 5; }
-    .portfolio-item[data-type="image"]:nth-of-type(3) { grid-column: span 5; }
-    .portfolio-item[data-type="image"]:nth-of-type(4) { grid-column: span 7; }
-
-    /* Default span for filtered view */
-    .portfolio-grid .portfolio-item { grid-column: span 6; }
-    .portfolio-grid .portfolio-item.wide { grid-column: span 7; }
-    .portfolio-grid .portfolio-item.narrow { grid-column: span 5; }
-
-    .portfolio-visual {
-      width: 100%; height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
+    .portfolio-item.film-frame::before,
+    .portfolio-item.film-frame::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 14px;
+      z-index: 3;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='14'%3E%3Crect width='18' height='14' fill='%231C1914'/%3E%3Crect x='4' y='3' width='8' height='8' rx='1' fill='%23F0EBE1'/%3E%3C/svg%3E") repeat-x;
+    }
+    .portfolio-item.film-frame::before { top: 0; }
+    .portfolio-item.film-frame::after { bottom: 0; }
+    .portfolio-item.film-frame .portfolio-visual-inner {
+      margin: 0;
+      height: 100%;
       overflow: hidden;
     }
-    .portfolio-visual .bg-pattern {
-      position: absolute;
-      inset: 0;
-      opacity: 0.9;
-    }
-    .pv-1 .bg-pattern { background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c0 50%, #f0dcc8 100%); }
-    .pv-2 .bg-pattern { background: linear-gradient(135deg, #e6d5f5 0%, #d5c0e8 50%, #e0c8f0 100%); }
-    .pv-3 .bg-pattern { background: linear-gradient(135deg, #d5e6f5 0%, #c0d5e8 50%, #c8e0f0 100%); }
-    .pv-4 .bg-pattern { background: linear-gradient(135deg, #f5e0d5 0%, #e8cec0 50%, #f0d8c8 100%); }
-    .pv-5 .bg-pattern { background: linear-gradient(135deg, #e0f5d5 0%, #cee8c0 50%, #d8f0c8 100%); }
-    .pv-6 .bg-pattern { background: linear-gradient(135deg, #f5d5e0 0%, #e8c0ce 50%, #f0c8d8 100%); }
-    .pv-7 .bg-pattern { background: linear-gradient(135deg, #f5f0d5 0%, #e8e0c0 50%, #f0eac8 100%); }
 
-    .portfolio-visual svg {
-      position: relative;
-      z-index: 1;
-      width: 48px; height: 48px;
-      opacity: 0.25;
+    .portfolio-thumb {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
     }
-    .portfolio-thumb { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
     .portfolio-item:hover .portfolio-thumb { transform: scale(1.05); }
     video.portfolio-thumb { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
     .portfolio-item:hover video.portfolio-thumb { transform: scale(1.05); }
@@ -441,51 +451,51 @@
     .portfolio-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, transparent 30%, rgba(26,21,16,0.85) 100%);
+      background: linear-gradient(180deg, transparent 40%, rgba(26,21,16,0.85) 100%);
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 28px;
+      padding: 20px;
       opacity: 0;
       transition: opacity 0.4s;
+      z-index: 4;
     }
     .portfolio-item:hover .portfolio-overlay { opacity: 1; }
     .portfolio-overlay h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.15rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
       font-weight: 600;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       color: #fff;
     }
-    .portfolio-overlay p { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+    .portfolio-overlay p { font-size: 0.75rem; color: rgba(255,255,255,0.7); }
     .portfolio-overlay .tag {
       display: inline-block;
-      padding: 4px 10px;
-      font-size: 0.7rem;
+      padding: 3px 8px;
+      font-size: 0.65rem;
       font-weight: 600;
       border-radius: 50px;
-      background: rgba(124,58,237,0.85);
+      background: rgba(140,126,111,0.85);
       color: #fff;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       width: fit-content;
     }
-    /* Play icon for video items */
+
     .play-icon {
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 64px; height: 64px;
+      width: 48px; height: 48px;
       background: rgba(255,255,255,0.9);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 3;
+      z-index: 5;
       box-shadow: 0 4px 20px rgba(0,0,0,0.15);
       transition: all 0.3s;
     }
-    .play-icon svg { margin-left: 3px; }
-    .play-icon { transition: all 0.3s ease; }
+    .play-icon svg { margin-left: 2px; }
     .portfolio-item:hover .play-icon {
       transform: translate(-50%, -50%) scale(1.1);
       background: #fff;
@@ -505,10 +515,7 @@
       transition: opacity 0.3s, visibility 0.3s;
       cursor: zoom-out;
     }
-    .lightbox.active {
-      opacity: 1;
-      visibility: visible;
-    }
+    .lightbox.active { opacity: 1; visibility: visible; }
     .lightbox-content {
       position: relative;
       max-width: 90vw;
@@ -525,10 +532,8 @@
     }
     .lightbox-close {
       position: absolute;
-      top: 16px;
-      right: 16px;
-      width: 44px;
-      height: 44px;
+      top: 16px; right: 16px;
+      width: 44px; height: 44px;
       border-radius: 50%;
       border: none;
       background: rgba(255,255,255,0.15);
@@ -542,41 +547,34 @@
       backdrop-filter: blur(8px);
       transition: background 0.2s;
     }
-    .lightbox-close:hover {
-      background: rgba(255,255,255,0.3);
-    }
+    .lightbox-close:hover { background: rgba(255,255,255,0.3); }
     .lightbox-info {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       padding: 20px 24px;
       background: linear-gradient(transparent, rgba(0,0,0,0.7));
       border-radius: 0 0 12px 12px;
     }
     .lightbox-info h3 {
       color: #fff;
-      font-family: 'Space Grotesk', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-size: 1.1rem;
       font-weight: 600;
       margin-bottom: 4px;
     }
-    .lightbox-info p {
-      color: rgba(255,255,255,0.7);
-      font-size: 0.85rem;
-    }
+    .lightbox-info p { color: rgba(255,255,255,0.7); font-size: 0.85rem; }
 
     /* ===== PROCESS ===== */
-    #process { background: var(--bg-alt); }
+    #process { background: var(--bg); }
     .process-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
+      gap: 20px;
       counter-reset: step;
     }
     .process-step {
       position: relative;
-      padding: 36px 28px;
+      padding: 32px 24px;
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
@@ -590,103 +588,28 @@
     }
     .process-step::before {
       content: counter(step, decimal-leading-zero);
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 3rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
       font-weight: 700;
       background: var(--gradient-text);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      opacity: 0.25;
+      opacity: 0.2;
       display: block;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
     .process-step h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.1rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
       font-weight: 600;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
-    .process-step p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; }
-
-    /* ===== CLIENTS MARQUEE ===== */
-    .clients-section { padding: 80px 0; overflow: hidden; }
-    .marquee-wrapper { position: relative; }
-    .marquee-wrapper::before,
-    .marquee-wrapper::after {
-      content: '';
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 120px;
-      z-index: 2;
-    }
-    .marquee-wrapper::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
-    .marquee-wrapper::after { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
-    .marquee-track {
-      display: flex;
-      gap: 60px;
-      animation: marquee 30s linear infinite;
-      width: max-content;
-    }
-    .marquee-item {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      opacity: 0.35;
-      white-space: nowrap;
-      transition: opacity 0.3s;
-    }
-    .marquee-item:hover { opacity: 0.7; }
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    /* ===== TESTIMONIALS ===== */
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-    .testimonial-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 36px 28px;
-      transition: all 0.3s;
-      box-shadow: var(--shadow-sm);
-    }
-    .testimonial-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
-    }
-    .testimonial-stars { color: #d97706; font-size: 0.85rem; margin-bottom: 16px; letter-spacing: 2px; }
-    .testimonial-text {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      line-height: 1.7;
-      margin-bottom: 20px;
-      font-style: italic;
-    }
-    .testimonial-author { display: flex; align-items: center; gap: 12px; }
-    .testimonial-avatar {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: var(--gradient);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #fff;
-    }
-    .testimonial-name { font-size: 0.9rem; font-weight: 600; }
-    .testimonial-role { font-size: 0.75rem; color: var(--text-muted); }
+    .process-step p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.7; }
 
     /* ===== CTA ===== */
     .cta-section {
-      padding: 120px 0;
+      padding: 100px 0;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -695,57 +618,50 @@
     .cta-bg {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at center, rgba(124,58,237,0.04) 0%, transparent 70%);
+      background: radial-gradient(ellipse at center, rgba(140,126,111,0.06) 0%, transparent 70%);
     }
-    .cta-section .section-title { font-size: clamp(2.2rem, 5vw, 3.5rem); }
-    .cta-section .section-subtitle { margin: 0 auto 40px; }
+    .cta-section .section-title { font-size: clamp(2rem, 4vw, 3rem); }
+    .cta-section .section-subtitle { margin: 0 auto 36px; }
+    .cta-contacts {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .cta-contacts a {
+      color: var(--text);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    .cta-contacts a:hover { color: var(--accent2); }
     .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
     /* ===== FOOTER ===== */
     footer {
-      padding: 60px 0 40px;
+      padding: 40px 0 32px;
       border-top: 1px solid var(--border);
       background: var(--bg);
     }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 48px;
-      margin-bottom: 48px;
-    }
-    .footer-brand p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.7;
-      margin-top: 16px;
-      max-width: 320px;
-    }
-    .footer-col h4 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-    .footer-col a {
-      display: block;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-      transition: color 0.3s;
-    }
-    .footer-col a:hover { color: var(--text); }
-    .footer-bottom {
+    .footer-inner {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-top: 32px;
-      border-top: 1px solid var(--border);
-      font-size: 0.8rem;
+    }
+    .footer-logo-img {
+      height: 24px;
+      width: auto;
+      opacity: 0.7;
+    }
+    .footer-center {
+      font-size: 0.75rem;
       color: var(--text-muted);
     }
-    .footer-socials { display: flex; gap: 12px; }
+    .footer-socials { display: flex; gap: 10px; }
     .footer-socials a {
-      width: 36px; height: 36px;
+      width: 32px; height: 32px;
       border-radius: 50%;
       background: var(--bg-alt);
       border: 1px solid var(--border);
@@ -753,6 +669,7 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s;
+      color: var(--text-muted);
     }
     .footer-socials a:hover {
       background: var(--accent);
@@ -764,8 +681,8 @@
     /* ===== SCROLL ANIMATIONS ===== */
     .reveal {
       opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(30px);
+      transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
@@ -786,7 +703,7 @@
         display: block;
         position: fixed;
         width: 36px; height: 36px;
-        border: 1.5px solid rgba(124,58,237,0.4);
+        border: 1.5px solid rgba(140,126,111,0.4);
         border-radius: 50%;
         pointer-events: none;
         z-index: 10000;
@@ -798,14 +715,12 @@
     @media (max-width: 1024px) {
       .services-grid { grid-template-columns: repeat(2, 1fr); }
       .process-grid { grid-template-columns: repeat(2, 1fr); }
-      .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
-      .portfolio-grid .portfolio-item.wide,
-      .portfolio-grid .portfolio-item.narrow,
-      .portfolio-grid .portfolio-item { grid-column: span 6; }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 768px) {
-      section { padding: 80px 0; }
+      :root { --strip-height: 70px; }
+      section { padding: 64px 0; }
+      .preview-card { width: 80px; height: 52px; }
       .nav-links { display: none; }
       .menu-toggle { display: block; }
       .nav-links.active {
@@ -813,22 +728,17 @@
         flex-direction: column;
         position: absolute;
         top: 100%; left: 0; right: 0;
-        background: rgba(250,246,240,0.98);
+        background: rgba(248,244,236,0.98);
         backdrop-filter: blur(20px);
         padding: 24px;
         gap: 20px;
         border-bottom: 1px solid var(--border);
       }
       .services-grid { grid-template-columns: 1fr; }
-      .process-grid { grid-template-columns: 1fr; }
-      .testimonials-grid { grid-template-columns: 1fr; }
-      .portfolio-grid .portfolio-item.wide,
-      .portfolio-grid .portfolio-item.narrow,
-      .portfolio-grid .portfolio-item { grid-column: span 12; }
-      .hero-stats { gap: 24px; flex-wrap: wrap; }
-      .hero-buttons { flex-direction: column; align-items: flex-start; }
-      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-      .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+      .process-grid { grid-template-columns: 1fr 1fr; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
       .lang-switch { order: -1; }
     }
   </style>
@@ -837,10 +747,19 @@
   <div class="cursor-dot" id="cursorDot"></div>
   <div class="cursor-ring" id="cursorRing"></div>
 
+  <!-- ===== PREVIEW STRIP ===== -->
+  <div class="preview-strip">
+    <button class="strip-arrow strip-arrow-left" id="stripLeft" aria-label="Scroll left">&#8249;</button>
+    <div class="preview-strip-track" id="previewStrip"></div>
+    <button class="strip-arrow strip-arrow-right" id="stripRight" aria-label="Scroll right">&#8250;</button>
+  </div>
+
   <!-- ===== NAVBAR ===== -->
   <nav class="navbar" id="navbar">
     <div class="container">
-      <a href="#" class="logo"><span>trio.ink</span></a>
+      <a href="#hero">
+        <img src="img/aivory_logo.png" alt="aivory" class="logo-img">
+      </a>
       <div class="nav-links" id="navLinks">
         <a href="#services">
           <span class="ua">Послуги</span>
@@ -854,9 +773,9 @@
           <span class="ua">Процес</span>
           <span class="en">Process</span>
         </a>
-        <a href="#reviews">
-          <span class="ua">Відгуки</span>
-          <span class="en">Reviews</span>
+        <a href="#contact">
+          <span class="ua">Контакти</span>
+          <span class="en">Contact</span>
         </a>
         <div class="lang-switch">
           <button class="active" data-lang="ua">UA</button>
@@ -875,54 +794,17 @@
     <div class="hero-bg-glow g2"></div>
     <div class="container">
       <div class="hero-content">
+        <img src="img/aivory_logo.png" alt="aivory — creative ai agency" class="hero-logo-img">
         <h1>
-          <span class="ua">Створюємо <span class="gradient-word">AI-контент</span><br>який продає</span>
-          <span class="en">We create <span class="gradient-word">AI content</span><br>that sells</span>
+          <span class="ua">Переосмислюємо майбутнє контенту.<br>Точність. Автентичність. Креативність.</span>
+          <span class="en">Redefining the Future of Content.<br>Precision. Authenticity. Creativity.</span>
         </h1>
-        <p class="hero-description">
-          <span class="ua">Відео, фото та SMM-стратегії на основі штучного інтелекту. Робимо бренди помітними у цифровому просторі.</span>
-          <span class="en">AI-powered video, photo and SMM strategies. We make brands stand out in the digital space.</span>
-        </p>
         <div class="hero-buttons">
-          <a href="#contact" class="btn-primary">
-            <span class="ua">Розпочати проєкт</span>
-            <span class="en">Start a project</span>
+          <a href="#portfolio" class="btn-primary">
+            <span class="ua">Дивитись роботи</span>
+            <span class="en">Explore Our Work</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
-          <a href="#portfolio" class="btn-outline">
-            <span class="ua">Дивитись роботи</span>
-            <span class="en">View our work</span>
-          </a>
-        </div>
-        <div class="hero-stats">
-          <div>
-            <div class="stat-number">150+</div>
-            <div class="stat-label">
-              <span class="ua">Проєктів</span>
-              <span class="en">Projects</span>
-            </div>
-          </div>
-          <div>
-            <div class="stat-number">40+</div>
-            <div class="stat-label">
-              <span class="ua">Клієнтів</span>
-              <span class="en">Clients</span>
-            </div>
-          </div>
-          <div>
-            <div class="stat-number">2M+</div>
-            <div class="stat-label">
-              <span class="ua">Охоплення аудиторії</span>
-              <span class="en">Audience reach</span>
-            </div>
-          </div>
-          <div>
-            <div class="stat-number">3x</div>
-            <div class="stat-label">
-              <span class="ua">Зростання залученості</span>
-              <span class="en">Engagement growth</span>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -933,87 +815,91 @@
     <div class="container">
       <div class="section-header reveal">
         <div class="section-label">
-          <span class="ua">Що ми робимо</span>
-          <span class="en">What we do</span>
+          <span class="ua">Послуги</span>
+          <span class="en">Services</span>
         </div>
         <h2 class="section-title">
-          <span class="ua">AI-інструменти.<br>Креативний підхід.</span>
-          <span class="en">AI tools.<br>Creative approach.</span>
+          <span class="ua">Що ми робимо</span>
+          <span class="en">What we do</span>
         </h2>
-        <p class="section-subtitle">
-          <span class="ua">Поєднуємо потужність генеративного AI з експертизою в маркетингу, щоб створювати контент, який працює.</span>
-          <span class="en">We combine the power of generative AI with marketing expertise to create content that works.</span>
-        </p>
       </div>
       <div class="services-grid">
-        <!-- 1 -->
         <div class="service-card reveal">
           <div class="service-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8C7E6F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
           </div>
           <h3>
             <span class="ua">AI-відео</span>
-            <span class="en">AI Video</span>
+            <span class="en">AI Video Production</span>
           </h3>
           <p>
-            <span class="ua">Генерація рекламних роликів, рілсів та відеоконтенту за допомогою нейромереж. Від концепції до фінального монтажу.</span>
-            <span class="en">AI-generated ad spots, reels and video content. From concept to final cut.</span>
+            <span class="ua">Генерація рекламних роликів, рілсів та відеоконтенту за допомогою нейромереж.</span>
+            <span class="en">AI-generated ad spots, reels and video content powered by neural networks.</span>
           </p>
         </div>
-        <!-- 2 -->
         <div class="service-card reveal">
           <div class="service-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B5B4E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           </div>
           <h3>
-            <span class="ua">AI-фото та візуали</span>
-            <span class="en">AI Photo &amp; Visuals</span>
+            <span class="ua">AI-фотографія</span>
+            <span class="en">AI Photography</span>
           </h3>
           <p>
-            <span class="ua">Унікальні зображення для реклами, каталогів та соціальних мереж. Фотореалістичні AI-візуали будь-якої складності.</span>
-            <span class="en">Unique images for ads, catalogs and social media. Photorealistic AI visuals of any complexity.</span>
+            <span class="ua">Фотореалістичні AI-візуали для реклами, каталогів та соціальних мереж.</span>
+            <span class="en">Photorealistic AI visuals for ads, catalogs and social media.</span>
           </p>
         </div>
-        <!-- 3 -->
         <div class="service-card reveal">
           <div class="service-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8C7E6F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
           </div>
           <h3>
-            <span class="ua">SMM та контент-стратегія</span>
-            <span class="en">SMM &amp; Content Strategy</span>
+            <span class="ua">SMM-контент</span>
+            <span class="en">SMM Content</span>
           </h3>
           <p>
-            <span class="ua">Комплексне ведення соцмереж: контент-плани, копірайтинг, візуали, аналітика та зростання аудиторії.</span>
-            <span class="en">Full social media management: content plans, copywriting, visuals, analytics and audience growth.</span>
+            <span class="ua">Контент-плани, копірайтинг, візуали та аналітика для соцмереж.</span>
+            <span class="en">Content plans, copywriting, visuals and analytics for social media.</span>
           </p>
         </div>
-        <!-- 4 -->
         <div class="service-card reveal">
           <div class="service-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B5B4E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
           </div>
           <h3>
             <span class="ua">Таргетована реклама</span>
-            <span class="en">Targeted Advertising</span>
+            <span class="en">Digital Advertising</span>
           </h3>
           <p>
-            <span class="ua">Налаштування та оптимізація рекламних кампаній з AI-креативами. A/B тестування та масштабування.</span>
-            <span class="en">Campaign setup and optimization with AI creatives. A/B testing and scaling.</span>
+            <span class="ua">Налаштування рекламних кампаній з AI-креативами. A/B тестування та масштабування.</span>
+            <span class="en">Campaign setup with AI creatives. A/B testing and scaling.</span>
           </p>
         </div>
-        <!-- 5 -->
         <div class="service-card reveal">
           <div class="service-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8C7E6F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
           </div>
           <h3>
             <span class="ua">AI-автоматизація</span>
-            <span class="en">AI Automation</span>
+            <span class="en">Creative Automation</span>
           </h3>
           <p>
-            <span class="ua">Чат-боти, автоворонки та AI-асистенти для вашого бізнесу. Автоматизуємо рутинні процеси.</span>
-            <span class="en">Chatbots, auto-funnels and AI assistants for your business. We automate routine tasks.</span>
+            <span class="ua">Чат-боти, автоворонки та AI-асистенти для автоматизації бізнес-процесів.</span>
+            <span class="en">Chatbots, auto-funnels and AI assistants for business automation.</span>
+          </p>
+        </div>
+        <div class="service-card reveal">
+          <div class="service-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B5B4E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <h3>
+            <span class="ua">Стратегічний консалтинг</span>
+            <span class="en">Strategy Consulting</span>
+          </h3>
+          <p>
+            <span class="ua">Аудит контенту, розробка AI-стратегії та впровадження нейромереж у маркетинг.</span>
+            <span class="en">Content audit, AI strategy development and neural network integration in marketing.</span>
           </p>
         </div>
       </div>
@@ -1032,75 +918,37 @@
           <span class="ua">Обрані проєкти</span>
           <span class="en">Selected projects</span>
         </h2>
-        <p class="section-subtitle">
-          <span class="ua">Кожен проєкт — це унікальне поєднання AI-технологій та креативного бачення.</span>
-          <span class="en">Each project is a unique blend of AI technology and creative vision.</span>
-        </p>
       </div>
 
-      <!-- Tabs -->
-      <div class="portfolio-tabs reveal">
-        <button class="portfolio-tab active" data-filter="all">
-          <span class="ua">Усе</span>
-          <span class="en">All</span>
-        </button>
-        <button class="portfolio-tab" data-filter="image">
-          <span class="ua">Зображення</span>
-          <span class="en">Images</span>
-        </button>
-        <button class="portfolio-tab" data-filter="video">
-          <span class="ua">Відео</span>
-          <span class="en">Video</span>
-        </button>
-      </div>
-
-      <!-- Grid -->
       <div class="portfolio-grid" id="portfolioGrid">
-        <!-- IMAGE 1 -->
-        <div class="portfolio-item wide reveal" data-type="image">
-          <img class="portfolio-thumb" src="img/portfolio-1.png" alt="AI-generated visual" loading="lazy">
+        <!-- Row 1 -->
+        <div class="portfolio-item reveal" data-type="image">
+          <img class="portfolio-thumb" src="img/portfolio-1.png" alt="Luna Cosmetics" loading="lazy">
           <div class="portfolio-overlay">
             <span class="tag">AI Photo</span>
             <h3>Luna Cosmetics</h3>
             <p>
-              <span class="ua">Фотореалістичні product-шоти без фотосесії</span>
-              <span class="en">Photorealistic product shots without a photoshoot</span>
+              <span class="ua">Фотореалістичні product-шоти</span>
+              <span class="en">Photorealistic product shots</span>
             </p>
           </div>
         </div>
-        <!-- VIDEO 1 -->
-        <div class="portfolio-item narrow reveal" data-type="video">
+        <div class="portfolio-item film-frame reveal" data-type="video">
           <video class="portfolio-thumb" src="видео/1219.mp4" muted loop playsinline preload="metadata"></video>
           <div class="play-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#7c3aed" stroke="none"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#8C7E6F" stroke="none"><polygon points="6 3 20 12 6 21 6 3"/></svg>
           </div>
           <div class="portfolio-overlay">
             <span class="tag">AI Video</span>
             <h3>Neon Dreams</h3>
             <p>
-              <span class="ua">AI-генерація рекламного ролика для fashion-бренду</span>
-              <span class="en">AI-generated ad spot for a fashion brand</span>
+              <span class="ua">Рекламний ролик для fashion-бренду</span>
+              <span class="en">Ad spot for a fashion brand</span>
             </p>
           </div>
         </div>
-        <!-- VIDEO 2 -->
-        <div class="portfolio-item narrow reveal" data-type="video">
-          <video class="portfolio-thumb" src="видео/1229(1)-1.mp4" muted loop playsinline preload="metadata"></video>
-          <div class="play-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#7c3aed" stroke="none"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-          </div>
-          <div class="portfolio-overlay">
-            <span class="tag">AI Video</span>
-            <h3>TechVault</h3>
-            <p>
-              <span class="ua">Серія AI-роликів для запуску лінійки гаджетів</span>
-              <span class="en">AI video series for a gadget product launch</span>
-            </p>
-          </div>
-        </div>
-        <!-- IMAGE 2 -->
-        <div class="portfolio-item wide reveal" data-type="image">
-          <img class="portfolio-thumb" src="img/portfolio-2.jpg" alt="AI-generated visual" loading="lazy">
+        <div class="portfolio-item reveal" data-type="image">
+          <img class="portfolio-thumb" src="img/portfolio-2.jpg" alt="Verdant Studio" loading="lazy">
           <div class="portfolio-overlay">
             <span class="tag">AI Photo</span>
             <h3>Verdant Studio</h3>
@@ -1110,12 +958,23 @@
             </p>
           </div>
         </div>
-        <!-- IMAGE 3 -->
-        <div class="portfolio-item narrow reveal" data-type="image">
-          <div class="portfolio-visual pv-5">
-            <div class="bg-pattern"></div>
-            <svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <!-- Row 2 -->
+        <div class="portfolio-item film-frame reveal" data-type="video">
+          <video class="portfolio-thumb" src="видео/1229(1)-1.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="play-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#8C7E6F" stroke="none"><polygon points="6 3 20 12 6 21 6 3"/></svg>
           </div>
+          <div class="portfolio-overlay">
+            <span class="tag">AI Video</span>
+            <h3>TechVault</h3>
+            <p>
+              <span class="ua">Серія роликів для запуску гаджетів</span>
+              <span class="en">Video series for a gadget launch</span>
+            </p>
+          </div>
+        </div>
+        <div class="portfolio-item reveal" data-type="image">
+          <img class="portfolio-thumb" src="img/portfolio-1.png" alt="FitZone" loading="lazy">
           <div class="portfolio-overlay">
             <span class="tag">AI Photo</span>
             <h3>FitZone</h3>
@@ -1125,11 +984,10 @@
             </p>
           </div>
         </div>
-        <!-- VIDEO 3 -->
-        <div class="portfolio-item narrow reveal" data-type="video">
+        <div class="portfolio-item film-frame reveal" data-type="video">
           <video class="portfolio-thumb" src="видео/вилла.mp4" muted loop playsinline preload="metadata"></video>
           <div class="play-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#7c3aed" stroke="none"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#8C7E6F" stroke="none"><polygon points="6 3 20 12 6 21 6 3"/></svg>
           </div>
           <div class="portfolio-overlay">
             <span class="tag">AI Video</span>
@@ -1140,33 +998,40 @@
             </p>
           </div>
         </div>
-        <!-- IMAGE 4 -->
+        <!-- Row 3 -->
         <div class="portfolio-item reveal" data-type="image">
-          <div class="portfolio-visual pv-7">
-            <div class="bg-pattern"></div>
-            <svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          </div>
+          <img class="portfolio-thumb" src="img/portfolio-2.jpg" alt="Apex Digital" loading="lazy">
           <div class="portfolio-overlay">
             <span class="tag">AI Photo</span>
             <h3>Apex Digital</h3>
             <p>
               <span class="ua">Креативи для рекламних кампаній</span>
-              <span class="en">Creatives for advertising campaigns</span>
+              <span class="en">Creatives for ad campaigns</span>
             </p>
           </div>
         </div>
-        <!-- VIDEO 4 -->
-        <div class="portfolio-item reveal" data-type="video">
+        <div class="portfolio-item film-frame reveal" data-type="video">
           <video class="portfolio-thumb" src="видео/финал.mp4" muted loop playsinline preload="metadata"></video>
           <div class="play-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#7c3aed" stroke="none"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#8C7E6F" stroke="none"><polygon points="6 3 20 12 6 21 6 3"/></svg>
           </div>
           <div class="portfolio-overlay">
             <span class="tag">AI Video</span>
             <h3>Fashion Nova</h3>
             <p>
-              <span class="ua">Рекламний ролик для Instagram та TikTok</span>
+              <span class="ua">Ролик для Instagram та TikTok</span>
               <span class="en">Ad spot for Instagram and TikTok</span>
+            </p>
+          </div>
+        </div>
+        <div class="portfolio-item reveal" data-type="image">
+          <img class="portfolio-thumb" src="img/portfolio-1.png" alt="Orbita" loading="lazy">
+          <div class="portfolio-overlay">
+            <span class="tag">AI Photo</span>
+            <h3>Orbita</h3>
+            <p>
+              <span class="ua">Брендинг та візуали для стартапу</span>
+              <span class="en">Branding and visuals for a startup</span>
             </p>
           </div>
         </div>
@@ -1179,17 +1044,13 @@
     <div class="container">
       <div class="section-header reveal">
         <div class="section-label">
-          <span class="ua">Як ми працюємо</span>
-          <span class="en">How we work</span>
+          <span class="ua">Процес</span>
+          <span class="en">Process</span>
         </div>
         <h2 class="section-title">
-          <span class="ua">Від ідеї до результату</span>
-          <span class="en">From idea to result</span>
+          <span class="ua">Як ми працюємо</span>
+          <span class="en">How we work</span>
         </h2>
-        <p class="section-subtitle">
-          <span class="ua">Прозорий процес з фокусом на результат та метрики.</span>
-          <span class="en">A transparent process focused on results and metrics.</span>
-        </p>
       </div>
       <div class="process-grid">
         <div class="process-step reveal">
@@ -1198,8 +1059,8 @@
             <span class="en">Briefing</span>
           </h3>
           <p>
-            <span class="ua">Занурюємося у ваш бізнес, вивчаємо аудиторію, конкурентів і визначаємо цілі проєкту.</span>
-            <span class="en">We dive into your business, research the audience, competitors and define project goals.</span>
+            <span class="ua">Занурюємося у ваш бізнес, вивчаємо аудиторію та визначаємо цілі.</span>
+            <span class="en">We dive into your business, research the audience and define goals.</span>
           </p>
         </div>
         <div class="process-step reveal">
@@ -1208,8 +1069,8 @@
             <span class="en">Strategy</span>
           </h3>
           <p>
-            <span class="ua">Розробляємо контент-стратегію, підбираємо AI-інструменти та формуємо креативну концепцію.</span>
-            <span class="en">We develop a content strategy, select AI tools and shape the creative concept.</span>
+            <span class="ua">Розробляємо контент-стратегію та підбираємо AI-інструменти.</span>
+            <span class="en">We develop a content strategy and select AI tools.</span>
           </p>
         </div>
         <div class="process-step reveal">
@@ -1218,123 +1079,19 @@
             <span class="en">Production</span>
           </h3>
           <p>
-            <span class="ua">Генеруємо контент за допомогою AI, допрацьовуємо вручну і погоджуємо з вами кожен етап.</span>
-            <span class="en">We generate content with AI, refine manually and align with you at every stage.</span>
+            <span class="ua">Генеруємо контент за допомогою AI та допрацьовуємо вручну.</span>
+            <span class="en">We generate content with AI and refine manually.</span>
           </p>
         </div>
         <div class="process-step reveal">
           <h3>
-            <span class="ua">Запуск та аналітика</span>
-            <span class="en">Launch &amp; Analytics</span>
+            <span class="ua">Запуск</span>
+            <span class="en">Launch</span>
           </h3>
           <p>
-            <span class="ua">Публікуємо контент, відстежуємо метрики та безперервно оптимізуємо результати.</span>
-            <span class="en">We publish content, track metrics and continuously optimize results.</span>
+            <span class="ua">Публікуємо, відстежуємо метрики та оптимізуємо результати.</span>
+            <span class="en">We publish, track metrics and optimize results.</span>
           </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== CLIENTS MARQUEE ===== -->
-  <section class="clients-section">
-    <div class="marquee-wrapper">
-      <div class="marquee-track">
-        <span class="marquee-item">Fashion Nova</span>
-        <span class="marquee-item">TechVault</span>
-        <span class="marquee-item">Luna Cosmetics</span>
-        <span class="marquee-item">FitZone</span>
-        <span class="marquee-item">Orbita</span>
-        <span class="marquee-item">Verdant Studio</span>
-        <span class="marquee-item">CloudBase</span>
-        <span class="marquee-item">Neon Dreams</span>
-        <span class="marquee-item">Apex Digital</span>
-        <span class="marquee-item">FlowBot</span>
-        <span class="marquee-item">Fashion Nova</span>
-        <span class="marquee-item">TechVault</span>
-        <span class="marquee-item">Luna Cosmetics</span>
-        <span class="marquee-item">FitZone</span>
-        <span class="marquee-item">Orbita</span>
-        <span class="marquee-item">Verdant Studio</span>
-        <span class="marquee-item">CloudBase</span>
-        <span class="marquee-item">Neon Dreams</span>
-        <span class="marquee-item">Apex Digital</span>
-        <span class="marquee-item">FlowBot</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== TESTIMONIALS ===== -->
-  <section id="reviews">
-    <div class="container">
-      <div class="section-header reveal">
-        <div class="section-label">
-          <span class="ua">Відгуки</span>
-          <span class="en">Testimonials</span>
-        </div>
-        <h2 class="section-title">
-          <span class="ua">Що кажуть клієнти</span>
-          <span class="en">What clients say</span>
-        </h2>
-        <p class="section-subtitle">
-          <span class="ua">Реальні результати, якими ми пишаємося.</span>
-          <span class="en">Real results we are proud of.</span>
-        </p>
-      </div>
-      <div class="testimonials-grid">
-        <div class="testimonial-card reveal">
-          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="testimonial-text">
-            <span class="ua">&laquo;trio.ink повністю змінили наш підхід до контенту. AI-візуали виглядають краще за традиційні фотосесії, а швидкість просто неймовірна.&raquo;</span>
-            <span class="en">&laquo;trio.ink completely changed our approach to content. AI visuals look better than traditional photoshoots, and the speed is simply incredible.&raquo;</span>
-          </p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">АК</div>
-            <div>
-              <div class="testimonial-name">
-                <span class="ua">Аліна Козлова</span>
-                <span class="en">Alina Kozlova</span>
-              </div>
-              <div class="testimonial-role">CMO, Luna Cosmetics</div>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card reveal">
-          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="testimonial-text">
-            <span class="ua">&laquo;За 6 місяців ми виросли з 5K до 120K підписників. Контент-стратегія та AI-креативи працюють як годинник. Рекомендую!&raquo;</span>
-            <span class="en">&laquo;In 6 months we grew from 5K to 120K followers. The content strategy and AI creatives work like clockwork. Highly recommend!&raquo;</span>
-          </p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">ДМ</div>
-            <div>
-              <div class="testimonial-name">
-                <span class="ua">Дмитро Морозов</span>
-                <span class="en">Dmytro Morozov</span>
-              </div>
-              <div class="testimonial-role">
-                <span class="ua">Засновник, FitZone</span>
-                <span class="en">Founder, FitZone</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card reveal">
-          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p class="testimonial-text">
-            <span class="ua">&laquo;AI-відеоролики для нашого запуску перевершили всі очікування. CTR реклами зріс у 3 рази порівняно з попередніми кампаніями.&raquo;</span>
-            <span class="en">&laquo;The AI videos for our launch exceeded all expectations. Ad CTR tripled compared to previous campaigns.&raquo;</span>
-          </p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar">ІС</div>
-            <div>
-              <div class="testimonial-name">
-                <span class="ua">Ігор Сидоров</span>
-                <span class="en">Igor Sydorov</span>
-              </div>
-              <div class="testimonial-role">Head of Marketing, TechVault</div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -1344,25 +1101,26 @@
   <section class="cta-section" id="contact">
     <div class="cta-bg"></div>
     <div class="container" style="position:relative;z-index:2;">
-      <div class="section-label reveal">
-        <span class="ua">Почнемо?</span>
-        <span class="en">Let's start?</span>
-      </div>
+      <div class="section-label reveal">CTA</div>
       <h2 class="section-title reveal">
-        <span class="ua">Готові виділитися<br>в цифровому просторі?</span>
-        <span class="en">Ready to stand out<br>in the digital space?</span>
+        <span class="ua">Зв'яжіться з aivory</span>
+        <span class="en">Connect with aivory</span>
       </h2>
       <p class="section-subtitle reveal">
-        <span class="ua">Розкажіть про ваш проєкт — ми запропонуємо стратегію і покажемо, як AI може підсилити ваш бренд.</span>
+        <span class="ua">Розкажіть про ваш проєкт — ми запропонуємо стратегію та покажемо, як AI може підсилити ваш бренд.</span>
         <span class="en">Tell us about your project — we'll suggest a strategy and show how AI can boost your brand.</span>
       </p>
       <div class="cta-buttons reveal">
-        <a href="https://t.me/trio_ink" class="btn-primary" target="_blank" rel="noopener">
+        <a href="https://t.me/aivory_agency" class="btn-primary" target="_blank" rel="noopener">
           <span class="ua">Написати в Telegram</span>
           <span class="en">Message on Telegram</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
-        <a href="mailto:hello@trio.ink" class="btn-outline">hello@trio.ink</a>
+        <a href="mailto:hello@aivory.agency" class="btn-outline">hello@aivory.agency</a>
+      </div>
+      <div class="cta-contacts reveal">
+        <span>hello@aivory.agency</span>
+        <span>aivory.agency</span>
       </div>
     </div>
   </section>
@@ -1370,79 +1128,18 @@
   <!-- ===== FOOTER ===== -->
   <footer>
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <div class="logo"><span>trio.ink</span></div>
-          <p>
-            <span class="ua">AI-powered digital-агентство. Створюємо контент нового покоління для брендів, які хочуть бути попереду.</span>
-            <span class="en">AI-powered digital agency. We create next-gen content for brands that want to stay ahead.</span>
-          </p>
+      <div class="footer-inner">
+        <img src="img/aivory_logo.png" alt="aivory" class="footer-logo-img">
+        <div class="footer-center">
+          <span class="ua">&copy; 2026 aivory. Усі права захищені.</span>
+          <span class="en">&copy; 2026 aivory. All rights reserved.</span>
         </div>
-        <div class="footer-col">
-          <h4>
-            <span class="ua">Послуги</span>
-            <span class="en">Services</span>
-          </h4>
-          <a href="#services">
-            <span class="ua">AI-відео</span>
-            <span class="en">AI Video</span>
-          </a>
-          <a href="#services">
-            <span class="ua">AI-фото</span>
-            <span class="en">AI Photo</span>
-          </a>
-          <a href="#services">SMM</a>
-          <a href="#services">
-            <span class="ua">Реклама</span>
-            <span class="en">Advertising</span>
-          </a>
-        </div>
-        <div class="footer-col">
-          <h4>
-            <span class="ua">Компанія</span>
-            <span class="en">Company</span>
-          </h4>
-          <a href="#portfolio">
-            <span class="ua">Портфоліо</span>
-            <span class="en">Portfolio</span>
-          </a>
-          <a href="#process">
-            <span class="ua">Процес</span>
-            <span class="en">Process</span>
-          </a>
-          <a href="#reviews">
-            <span class="ua">Відгуки</span>
-            <span class="en">Reviews</span>
-          </a>
-          <a href="#contact">
-            <span class="ua">Контакти</span>
-            <span class="en">Contacts</span>
-          </a>
-        </div>
-        <div class="footer-col">
-          <h4>
-            <span class="ua">Контакти</span>
-            <span class="en">Contacts</span>
-          </h4>
-          <a href="mailto:hello@trio.ink">hello@trio.ink</a>
-          <a href="https://t.me/trio_ink" target="_blank" rel="noopener">Telegram</a>
-          <a href="https://instagram.com/trio.ink" target="_blank" rel="noopener">Instagram</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>
-          <span class="ua">&copy; 2026 trio.ink. Усі права захищені.</span>
-          <span class="en">&copy; 2026 trio.ink. All rights reserved.</span>
-        </span>
         <div class="footer-socials">
-          <a href="https://t.me/trio_ink" target="_blank" rel="noopener" aria-label="Telegram">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 1 0 24 12.056 12.01 12.01 0 0 0 11.944 0Zm5.635 8.098-1.762 8.304c-.133.59-.48.733-.973.456l-2.688-1.98-1.297 1.248c-.144.144-.264.264-.54.264l.192-2.736 4.98-4.5c.216-.192-.048-.3-.336-.108l-6.156 3.876-2.652-.828c-.576-.18-.588-.576.12-.852l10.368-3.996c.48-.174.9.108.744.852Z"/></svg>
+          <a href="https://t.me/aivory_agency" target="_blank" rel="noopener" aria-label="Telegram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 1 0 24 12.056 12.01 12.01 0 0 0 11.944 0Zm5.635 8.098-1.762 8.304c-.133.59-.48.733-.973.456l-2.688-1.98-1.297 1.248c-.144.144-.264.264-.54.264l.192-2.736 4.98-4.5c.216-.192-.048-.3-.336-.108l-6.156 3.876-2.652-.828c-.576-.18-.588-.576.12-.852l10.368-3.996c.48-.174.9.108.744.852Z"/></svg>
           </a>
-          <a href="https://instagram.com/trio.ink" target="_blank" rel="noopener" aria-label="Instagram">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-          </a>
-          <a href="#" aria-label="YouTube">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.499 6.203a3.02 3.02 0 0 0-2.14-2.14C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.359.518A3.02 3.02 0 0 0 .502 6.203C0 8.057 0 12 0 12s0 3.943.502 5.797a3.02 3.02 0 0 0 2.14 2.14c1.853.518 9.358.518 9.358.518s7.505 0 9.359-.518a3.02 3.02 0 0 0 2.14-2.14C24 15.943 24 12 24 12s0-3.943-.501-5.797ZM9.546 15.568V8.432L15.818 12l-6.272 3.568Z"/></svg>
+          <a href="https://instagram.com/aivory.agency" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           </a>
         </div>
       </div>
@@ -1481,27 +1178,6 @@
       link.addEventListener('click', () => navLinks.classList.remove('active'));
     });
 
-    // ===== PORTFOLIO TABS =====
-    const tabs = document.querySelectorAll('.portfolio-tab');
-    const items = document.querySelectorAll('.portfolio-item');
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-
-        const filter = tab.dataset.filter;
-
-        items.forEach(item => {
-          if (filter === 'all' || item.dataset.type === filter) {
-            item.classList.remove('hidden');
-          } else {
-            item.classList.add('hidden');
-          }
-        });
-      });
-    });
-
     // ===== SCROLL REVEAL =====
     const revealElements = document.querySelectorAll('.reveal');
     const revealObserver = new IntersectionObserver((entries) => {
@@ -1537,11 +1213,11 @@
     document.querySelectorAll('a, button, .portfolio-item, .service-card').forEach(el => {
       el.addEventListener('mouseenter', () => {
         cursorRing.style.transform = 'scale(1.5)';
-        cursorRing.style.borderColor = 'rgba(124,58,237,0.7)';
+        cursorRing.style.borderColor = 'rgba(140,126,111,0.7)';
       });
       el.addEventListener('mouseleave', () => {
         cursorRing.style.transform = 'scale(1)';
-        cursorRing.style.borderColor = 'rgba(124,58,237,0.4)';
+        cursorRing.style.borderColor = 'rgba(140,126,111,0.4)';
       });
     });
 
@@ -1561,6 +1237,65 @@
         if (icon) icon.style.opacity = '1';
       });
     });
+
+    // ===== BUILD PREVIEW STRIP FROM PORTFOLIO =====
+    (function() {
+      const strip = document.getElementById('previewStrip');
+      const portfolioItems = document.querySelectorAll('#portfolioGrid .portfolio-item');
+
+      portfolioItems.forEach(item => {
+        const type = item.dataset.type;
+        const card = document.createElement('div');
+        card.className = 'preview-card' + (type === 'video' ? ' film-strip' : '');
+        card.style.cursor = 'pointer';
+
+        if (type === 'video') {
+          const src = item.querySelector('video')?.getAttribute('src');
+          if (src) card.innerHTML = `<video src="${src}" muted preload="metadata"></video>`;
+        } else {
+          const src = item.querySelector('img')?.getAttribute('src');
+          if (src) card.innerHTML = `<img src="${src}" alt="" loading="lazy">`;
+        }
+
+        card.addEventListener('click', () => {
+          item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        strip.appendChild(card);
+      });
+
+      // Hover play for video cards in strip
+      strip.querySelectorAll('.preview-card.film-strip').forEach(card => {
+        const video = card.querySelector('video');
+        if (!video) return;
+        card.addEventListener('mouseenter', () => video.play().catch(() => {}));
+        card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
+      });
+
+      // Drag to scroll
+      let isDragging = false, startX, scrollLeft;
+
+      strip.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        strip.classList.add('dragging');
+        startX = e.pageX - strip.offsetLeft;
+        scrollLeft = strip.scrollLeft;
+      });
+      strip.addEventListener('mouseleave', () => { isDragging = false; strip.classList.remove('dragging'); });
+      strip.addEventListener('mouseup', () => { isDragging = false; strip.classList.remove('dragging'); });
+      strip.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - strip.offsetLeft;
+        strip.scrollLeft = scrollLeft - (x - startX);
+      });
+
+      // Arrow buttons
+      const leftBtn = document.getElementById('stripLeft');
+      const rightBtn = document.getElementById('stripRight');
+      leftBtn.addEventListener('click', () => { strip.scrollBy({ left: -200, behavior: 'smooth' }); });
+      rightBtn.addEventListener('click', () => { strip.scrollBy({ left: 200, behavior: 'smooth' }); });
+    })();
 
     // ===== LIGHTBOX =====
     const lightbox = document.getElementById('lightbox');
@@ -1612,38 +1347,6 @@
         const target = document.querySelector(this.getAttribute('href'));
         if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
-    });
-
-    // ===== COUNTER ANIMATION =====
-    document.querySelectorAll('.stat-number').forEach(counter => {
-      const text = counter.textContent;
-      const hasPlus = text.includes('+');
-      const hasM = text.includes('M');
-      const hasX = text.includes('x');
-      let target;
-      if (hasM) target = parseFloat(text);
-      else if (hasX) target = parseFloat(text);
-      else target = parseInt(text);
-
-      let current = 0;
-      const increment = target / 60;
-
-      function update() {
-        current += increment;
-        if (current >= target) {
-          counter.textContent = text;
-          return;
-        }
-        if (hasM) counter.textContent = current.toFixed(1) + 'M+';
-        else if (hasX) counter.textContent = current.toFixed(1) + 'x';
-        else counter.textContent = Math.floor(current) + (hasPlus ? '+' : '');
-        requestAnimationFrame(update);
-      }
-
-      const obs = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) { update(); obs.unobserve(counter); }
-      }, { threshold: 0.5 });
-      obs.observe(counter);
     });
   </script>
 </body>
