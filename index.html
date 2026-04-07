@@ -1,64 +1,34 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>aivory — creative ai agency</title>
-  <meta name="description" content="Креативне AI-агентство нового покоління: відео, фото, SMM для брендів, які хочуть виділятися.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="img/aivory_logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
     :root {
       --bg: #F8F4EC;
       --bg-alt: #F0EBE1;
       --bg-card: #FDFCF9;
-      --bg-card-hover: #F8F4EC;
       --text: #1C1914;
       --text-muted: #8C8278;
       --accent: #8C7E6F;
-      --accent2: #6B5B4E;
-      --gradient: linear-gradient(135deg, #8C7E6F, #6B5B4E);
-      --gradient-text: linear-gradient(135deg, #8C7E6F, #5A4D42);
-      --border: rgba(28, 25, 20, 0.08);
-      --border-hover: rgba(140, 126, 111, 0.3);
-      --shadow-sm: 0 1px 3px rgba(28, 25, 20, 0.04);
-      --shadow-md: 0 4px 20px rgba(28, 25, 20, 0.06);
-      --shadow-lg: 0 8px 40px rgba(28, 25, 20, 0.08);
-      --radius: 16px;
-      --strip-height: 90px;
+      --border: #E8E2D8;
+      --strip-height: 80px;
     }
-
-    html { scroll-behavior: smooth; font-size: 16px; }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Outfit', sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ===== LANGUAGE TOGGLE ===== */
-    body.lang-ua .en { display: none !important; }
-    body.lang-en .ua { display: none !important; }
-
-    a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-    section { padding: 100px 0; position: relative; scroll-margin-top: calc(var(--strip-height) + 40px); }
-
-    /* ===== SUBTLE GRAIN ===== */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 9999;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding-top: var(--strip-height);
     }
 
     /* ===== PREVIEW STRIP ===== */
@@ -85,32 +55,39 @@
       align-items: center;
     }
     .preview-strip-track::-webkit-scrollbar { display: none; }
-
     .preview-card {
       flex: 0 0 auto;
       width: 100px;
       height: 64px;
       border-radius: 6px;
       overflow: hidden;
-      cursor: pointer;
       position: relative;
-      transition: transform 0.3s, box-shadow 0.3s;
       background: var(--bg-card);
       border: 1px solid var(--border);
     }
-    .preview-card:hover {
-      transform: scale(1.05);
-      box-shadow: var(--shadow-md);
+    .preview-card img,
+    .preview-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
-    .preview-strip-track.dragging {
-      cursor: grabbing;
-      scroll-behavior: auto;
+    .preview-card.film-strip {
+      border-radius: 4px;
+      border: none;
+      position: relative;
     }
-    .preview-strip-track.dragging .preview-card {
-      pointer-events: none;
+    .preview-card.film-strip::before,
+    .preview-card.film-strip::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 8px;
+      z-index: 2;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8'%3E%3Crect width='14' height='8' fill='%231C1914'/%3E%3Crect x='4' y='2' width='4' height='4' rx='0.5' fill='%23F0EBE1'/%3E%3C/svg%3E") repeat-x;
     }
+    .preview-card.film-strip::before { top: 0; }
+    .preview-card.film-strip::after { bottom: 0; }
 
-    /* Strip arrows */
     .strip-arrow {
       position: absolute;
       top: 0; bottom: 0;
@@ -136,1169 +113,85 @@
       background: linear-gradient(270deg, var(--bg-alt) 60%, transparent);
     }
     .strip-arrow:hover { color: var(--text); }
-    .preview-card img,
-    .preview-card video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
 
-    /* Film strip styling for video previews */
-    .preview-card.film-strip {
-      border-radius: 4px;
-      border: none;
-      position: relative;
+    /* ===== CONTENT ===== */
+    .container {
+      max-width: 600px;
+      padding: 40px 20px;
     }
-    .preview-card.film-strip::before,
-    .preview-card.film-strip::after {
-      content: '';
-      position: absolute;
-      left: 0; right: 0;
-      height: 8px;
-      z-index: 2;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8'%3E%3Crect width='14' height='8' fill='%231C1914'/%3E%3Crect x='4' y='2' width='4' height='4' rx='0.5' fill='%23F0EBE1'/%3E%3C/svg%3E") repeat-x;
-    }
-    .preview-card.film-strip::before { top: 0; }
-    .preview-card.film-strip::after { bottom: 0; }
-
-    /* ===== NAVBAR ===== */
-    .navbar {
-      position: fixed;
-      top: var(--strip-height);
-      left: 0; right: 0;
-      z-index: 1000;
-      padding: 16px 0;
-      transition: all 0.4s ease;
-      background: rgba(248, 244, 236, 0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-    }
-    .navbar.scrolled {
-      padding: 10px 0;
-    }
-    .navbar .container { display: flex; align-items: center; justify-content: space-between; }
-    .logo-img {
-      height: 44px;
-      width: auto;
-    }
-    .nav-links { display: flex; gap: 32px; align-items: center; }
-    .nav-links a {
+    .under-construction {
       font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      transition: color 0.3s;
-      position: relative;
-    }
-    .nav-links a:hover { color: var(--text); }
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px; left: 0;
-      width: 0; height: 2px;
-      background: var(--gradient);
-      transition: width 0.3s;
-    }
-    .nav-links a:hover::after { width: 100%; }
-
-    .lang-switch {
-      display: flex;
-      background: var(--bg-alt);
-      border-radius: 50px;
-      padding: 3px;
-      border: 1px solid var(--border);
-      gap: 2px;
-    }
-    .lang-switch button {
-      padding: 5px 12px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      background: transparent;
-      color: var(--text-muted);
-      transition: all 0.3s;
-      font-family: 'Inter', sans-serif;
-    }
-    .lang-switch button.active {
-      background: var(--bg-card);
-      color: var(--text);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 14px 32px;
-      background: var(--gradient);
-      color: #fff;
-      font-size: 0.875rem;
-      font-weight: 600;
-      border-radius: 50px;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(140, 126, 111, 0.3);
-    }
-    .btn-outline {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 14px 32px;
-      background: transparent;
-      color: var(--text);
-      font-size: 0.875rem;
-      font-weight: 600;
-      border-radius: 50px;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .btn-outline:hover {
-      border-color: var(--accent);
-      background: rgba(140, 126, 111, 0.05);
-    }
-
-    .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
-    .menu-toggle span { display: block; width: 24px; height: 2px; background: var(--text); margin: 6px 0; transition: all 0.3s; }
-
-    /* ===== HERO ===== */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding-top: calc(var(--strip-height) + 80px);
-      padding-bottom: 80px;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-bg-glow {
-      position: absolute;
-      width: 600px; height: 600px;
-      border-radius: 50%;
-      filter: blur(150px);
-      opacity: 0.06;
-      pointer-events: none;
-    }
-    .hero-bg-glow.g1 { top: -100px; right: -100px; background: #8C7E6F; }
-    .hero-bg-glow.g2 { bottom: -200px; left: -200px; background: #6B5B4E; }
-    .hero-content { position: relative; z-index: 2; max-width: 700px; }
-    .hero-logo-img {
-      width: clamp(300px, 45vw, 520px);
-      height: auto;
-      margin: 0 auto 36px;
-      animation: fadeInUp 0.8s ease forwards;
-    }
-    .hero h1 {
-      font-family: 'Outfit', sans-serif;
-      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-      font-weight: 500;
-      line-height: 1.5;
-      letter-spacing: -0.01em;
-      margin-bottom: 36px;
-      color: var(--text);
-      animation: fadeInUp 0.8s 0.2s ease both;
-    }
-    .hero-buttons {
-      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
-      animation: fadeInUp 0.8s 0.4s ease both;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===== SECTION HEADERS ===== */
-    .section-label {
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-weight: 400;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
       color: var(--accent);
-      margin-bottom: 16px;
+      margin-bottom: 40px;
     }
-    .section-title {
-      font-family: 'Outfit', sans-serif;
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 20px;
+    .logo {
+      max-width: 320px;
+      width: 100%;
+      margin-bottom: 40px;
     }
-    .section-subtitle {
-      font-size: 1rem;
-      color: var(--text-muted);
-      max-width: 560px;
-      line-height: 1.7;
-    }
-    .section-header { margin-bottom: 56px; }
-
-    /* ===== SERVICES ===== */
-    #services { background: var(--bg-alt); }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-    .service-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px 24px;
-      transition: all 0.4s ease;
-      position: relative;
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-    }
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--gradient);
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
-      border-color: var(--border-hover);
-    }
-    .service-card:hover::before { opacity: 1; }
-    .service-icon {
-      width: 48px; height: 48px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, rgba(140,126,111,0.1), rgba(107,91,78,0.08));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-    .service-card h3 {
-      font-family: 'Outfit', sans-serif;
+    .tagline {
       font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-    .service-card p {
-      font-size: 0.85rem;
+      font-weight: 300;
       color: var(--text-muted);
-      line-height: 1.7;
-    }
-
-    /* ===== PORTFOLIO ===== */
-    #portfolio { background: var(--bg); }
-    .portfolio-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-    .portfolio-item {
-      position: relative;
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      aspect-ratio: 4/3;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      transition: all 0.4s;
-    }
-    .portfolio-item:hover {
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-4px);
-    }
-
-    /* Film strip for video items in portfolio */
-    .portfolio-item.film-frame {
-      border-radius: 4px;
-      border: none;
-      background: #1C1914;
-      padding: 10px 0;
-    }
-    .portfolio-item.film-frame::before,
-    .portfolio-item.film-frame::after {
-      content: '';
-      position: absolute;
-      left: 0; right: 0;
-      height: 14px;
-      z-index: 3;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='14'%3E%3Crect width='18' height='14' fill='%231C1914'/%3E%3Crect x='4' y='3' width='8' height='8' rx='1' fill='%23F0EBE1'/%3E%3C/svg%3E") repeat-x;
-    }
-    .portfolio-item.film-frame::before { top: 0; }
-    .portfolio-item.film-frame::after { bottom: 0; }
-    .portfolio-item.film-frame .portfolio-visual-inner {
-      margin: 0;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    .portfolio-thumb {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s ease;
-    }
-    .portfolio-item:hover .portfolio-thumb { transform: scale(1.05); }
-    video.portfolio-thumb { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-    .portfolio-item:hover video.portfolio-thumb { transform: scale(1.05); }
-
-    .portfolio-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, transparent 40%, rgba(26,21,16,0.85) 100%);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 20px;
-      opacity: 0;
-      transition: opacity 0.4s;
-      z-index: 4;
-    }
-    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
-    .portfolio-overlay h3 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: #fff;
-    }
-    .portfolio-overlay p { font-size: 0.75rem; color: rgba(255,255,255,0.7); }
-    .portfolio-overlay .tag {
-      display: inline-block;
-      padding: 3px 8px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      border-radius: 50px;
-      background: rgba(140,126,111,0.85);
-      color: #fff;
-      margin-bottom: 8px;
-      width: fit-content;
-    }
-
-    .play-icon {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 48px; height: 48px;
-      background: rgba(255,255,255,0.9);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 5;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      transition: all 0.3s;
-    }
-    .play-icon svg { margin-left: 2px; }
-    .portfolio-item:hover .play-icon {
-      transform: translate(-50%, -50%) scale(1.1);
-      background: #fff;
-    }
-
-    /* ===== LIGHTBOX ===== */
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: rgba(0,0,0,0.92);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s, visibility 0.3s;
-      cursor: zoom-out;
-    }
-    .lightbox.active { opacity: 1; visibility: visible; }
-    .lightbox-content {
-      position: relative;
-      max-width: 90vw;
-      max-height: 90vh;
-      cursor: default;
-    }
-    .lightbox-content img,
-    .lightbox-content video {
-      max-width: 90vw;
-      max-height: 90vh;
-      border-radius: 12px;
-      object-fit: contain;
-      display: block;
-    }
-    .lightbox-close {
-      position: absolute;
-      top: 16px; right: 16px;
-      width: 44px; height: 44px;
-      border-radius: 50%;
-      border: none;
-      background: rgba(255,255,255,0.15);
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      backdrop-filter: blur(8px);
-      transition: background 0.2s;
-    }
-    .lightbox-close:hover { background: rgba(255,255,255,0.3); }
-    .lightbox-info {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 20px 24px;
-      background: linear-gradient(transparent, rgba(0,0,0,0.7));
-      border-radius: 0 0 12px 12px;
-    }
-    .lightbox-info h3 {
-      color: #fff;
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .lightbox-info p { color: rgba(255,255,255,0.7); font-size: 0.85rem; }
-
-    /* ===== PROCESS ===== */
-    #process { background: var(--bg-alt); }
-    .process-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      counter-reset: step;
-    }
-    .process-step {
-      position: relative;
-      padding: 32px 24px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      counter-increment: step;
-      transition: all 0.3s;
-      box-shadow: var(--shadow-sm);
-    }
-    .process-step:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
-    }
-    .process-step::before {
-      content: counter(step, decimal-leading-zero);
-      font-family: 'Outfit', sans-serif;
-      font-size: 3rem;
-      font-weight: 700;
-      background: var(--gradient-text);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      opacity: 0.25;
-      display: block;
-      margin-bottom: 16px;
-    }
-    .process-step h3 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-    .process-step p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; }
-
-    /* ===== CTA ===== */
-    .cta-section {
-      padding: 100px 0;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      background: var(--bg);
-    }
-    .cta-bg {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at center, rgba(140,126,111,0.06) 0%, transparent 70%);
-    }
-    .cta-section .section-title { font-size: clamp(2rem, 4vw, 3rem); }
-    .cta-section .section-subtitle { margin: 0 auto 36px; }
-    .cta-contacts {
-      display: flex;
-      gap: 32px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 16px;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-    .cta-contacts a {
-      color: var(--text);
-      font-weight: 500;
-      transition: color 0.3s;
-    }
-    .cta-contacts a:hover { color: var(--accent2); }
-    .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-
-    /* ===== FOOTER ===== */
-    footer {
-      padding: 40px 0 32px;
-      border-top: 1px solid var(--border);
-      background: var(--bg);
-    }
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .footer-logo-img {
-      height: 24px;
-      width: auto;
-      opacity: 0.7;
-    }
-    .footer-center {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-    .footer-socials { display: flex; gap: 10px; }
-    .footer-socials a {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: var(--bg-alt);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s;
-      color: var(--text-muted);
-    }
-    .footer-socials a:hover {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    /* ===== SCROLL ANIMATIONS ===== */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    /* ===== CUSTOM CURSOR ===== */
-    .cursor-dot, .cursor-ring { display: none; }
-    @media (hover: hover) and (pointer: fine) {
-      .cursor-dot {
-        display: block;
-        position: fixed;
-        width: 6px; height: 6px;
-        background: var(--text);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 10000;
-        transition: transform 0.1s;
-      }
-      .cursor-ring {
-        display: block;
-        position: fixed;
-        width: 36px; height: 36px;
-        border: 1.5px solid rgba(140,126,111,0.4);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 10000;
-        transition: all 0.15s ease-out;
-      }
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 1024px) {
-      .services-grid { grid-template-columns: repeat(2, 1fr); }
-      .process-grid { grid-template-columns: repeat(2, 1fr); }
-      .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 768px) {
-      :root { --strip-height: 70px; }
-      section { padding: 64px 0; }
-      .preview-card { width: 80px; height: 52px; }
-      .nav-links { display: none; }
-      .menu-toggle { display: block; }
-      .nav-links.active {
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        top: 100%; left: 0; right: 0;
-        background: rgba(248,244,236,0.98);
-        backdrop-filter: blur(20px);
-        padding: 24px;
-        gap: 20px;
-        border-bottom: 1px solid var(--border);
-      }
-      .services-grid { grid-template-columns: 1fr; }
-      .process-grid { grid-template-columns: 1fr 1fr; }
-      .portfolio-grid { grid-template-columns: 1fr; }
-      .hero-buttons { flex-direction: column; align-items: center; }
-      .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
-      .lang-switch { order: -1; }
+      line-height: 1.8;
     }
   </style>
 </head>
-<body class="lang-en">
-  <div class="cursor-dot" id="cursorDot"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
+<body>
 
   <!-- ===== PREVIEW STRIP ===== -->
   <div class="preview-strip">
     <button class="strip-arrow strip-arrow-left" id="stripLeft" aria-label="Scroll left">&#8249;</button>
-    <div class="preview-strip-track" id="previewStrip"></div>
+    <div class="preview-strip-track" id="previewStrip">
+      <div class="preview-card film-strip"><video src="img/thumbs/openart-video_9da9db13_1773088161773.mp4" muted preload="metadata"></video></div>
+      <div class="preview-card film-strip"><video src="видео/1219.mp4" muted preload="metadata"></video></div>
+      <div class="preview-card"><img src="img/thumbs/chiffon_04_closeup_sensual.jpg" alt="" loading="lazy"></div>
+      <div class="preview-card film-strip"><video src="img/thumbs/scene_03.mp4" muted preload="metadata"></video></div>
+      <div class="preview-card film-strip"><video src="видео/вилла.mp4" muted preload="metadata"></video></div>
+      <div class="preview-card"><img src="img/thumbs/chiffon_05_twirl_movement.jpg" alt="" loading="lazy"></div>
+      <div class="preview-card film-strip"><video src="img/thumbs/openart-video_d568144a_1774264038519.mp4" muted preload="metadata"></video></div>
+      <div class="preview-card film-strip"><video src="видео/финал.mp4" muted preload="metadata"></video></div>
+      <div class="preview-card film-strip"><video src="видео/1229(1)-1.mp4" muted preload="metadata"></video></div>
+      <div class="preview-card"><img src="img/thumbs/photo_2026-04-07_20-55-37.jpg" alt="" loading="lazy"></div>
+      <div class="preview-card"><img src="img/thumbs/openart-52f3bef3b1254e628cb103ea79db124e_00001__raw.jpg" alt="" loading="lazy"></div>
+      <div class="preview-card film-strip"><video src="img/thumbs/openart-video_f527576e_1773062185398.mp4" muted preload="metadata"></video></div>
+    </div>
     <button class="strip-arrow strip-arrow-right" id="stripRight" aria-label="Scroll right">&#8250;</button>
   </div>
 
-  <!-- ===== NAVBAR ===== -->
-  <nav class="navbar" id="navbar">
-    <div class="container">
-      <a href="#hero">
-        <img src="img/aivory_logo.png" alt="aivory" class="logo-img">
-      </a>
-      <div class="nav-links" id="navLinks">
-        <a href="#services">
-          <span class="ua">Послуги</span>
-          <span class="en">Services</span>
-        </a>
-        <a href="#portfolio">
-          <span class="ua">Портфоліо</span>
-          <span class="en">Portfolio</span>
-        </a>
-        <a href="#process">
-          <span class="ua">Процес</span>
-          <span class="en">Process</span>
-        </a>
-        <a href="#contact">
-          <span class="ua">Контакти</span>
-          <span class="en">Contact</span>
-        </a>
-        <div class="lang-switch">
-          <button data-lang="ua">UA</button>
-          <button class="active" data-lang="en">EN</button>
-        </div>
-      </div>
-      <button class="menu-toggle" id="menuToggle" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- ===== HERO ===== -->
-  <section class="hero" id="hero">
-    <div class="hero-bg-glow g1"></div>
-    <div class="hero-bg-glow g2"></div>
-    <div class="container">
-      <div class="hero-content">
-        <img src="img/aivory_logo.png" alt="aivory — creative ai agency" class="hero-logo-img">
-        <h1>
-          <span class="ua">Де ідеї стають AI-рішеннями.<br>Від концепції до фінального контенту.</span>
-          <span class="en">Where Ideas Become AI Solutions.<br>From Concept to Final Content.</span>
-        </h1>
-        <div class="hero-buttons">
-          <a href="#portfolio" class="btn-primary">
-            <span class="ua">Дивитись роботи</span>
-            <span class="en">Explore Our Work</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== SERVICES ===== -->
-  <section id="services">
-    <div class="container">
-      <div class="section-header reveal">
-        <div class="section-label">
-          <span class="ua">Послуги</span>
-          <span class="en">Services</span>
-        </div>
-        <h2 class="section-title">
-          <span class="ua">Що ми робимо</span>
-          <span class="en">What we do</span>
-        </h2>
-      </div>
-      <div class="services-grid">
-        <div class="service-card reveal">
-          <div class="service-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8C7E6F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-          </div>
-          <h3>
-            <span class="ua">AI-відео</span>
-            <span class="en">AI Video Production</span>
-          </h3>
-          <p>
-            <span class="ua">Instagram Reels та short-form відео.<br>AI-генерований контент (UGC, реклама, бренд-відео).<br>Повний цикл AI-продакшну — від концепції до готового результату.</span>
-            <span class="en">Instagram Reels &amp; short-form video.<br>AI-generated content (UGC, ads, brand videos).<br>Full-cycle AI production — from concept to delivery.</span>
-          </p>
-        </div>
-        <div class="service-card reveal">
-          <div class="service-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B5B4E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          </div>
-          <h3>
-            <span class="ua">AI-фотографія</span>
-            <span class="en">AI Photography</span>
-          </h3>
-          <p>
-            <span class="ua">Luxury lifestyle візуали для реклами.<br>Преміум flatlay фотографія.<br>Фотоконтент для журналів, сайтів та SMM.</span>
-            <span class="en">Luxury lifestyle visuals for ADS.<br>Premium flatlay photography.<br>Photo content for magazines/websites/SMM.</span>
-          </p>
-        </div>
-        <div class="service-card reveal">
-          <div class="service-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8C7E6F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          </div>
-          <h3>
-            <span class="ua">Креативний стратегічний консалтинг</span>
-            <span class="en">Creative Strategy Consulting</span>
-          </h3>
-          <p>
-            <span class="ua">Стратегічний аудит контенту та AI-рішення для сайтів, SMM та реклами — з урахуванням аналітики аудиторії та цілей бренду.</span>
-            <span class="en">Strategic content audits and AI-driven solutions for websites, SMM, and advertising — aligned with audience insights and brand goals.</span>
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PORTFOLIO ===== -->
-  <section id="portfolio">
-    <div class="container">
-      <div class="section-header reveal">
-        <div class="section-label">
-          <span class="ua">Портфоліо</span>
-          <span class="en">Portfolio</span>
-        </div>
-        <h2 class="section-title">
-          <span class="ua">Обрані проєкти</span>
-          <span class="en">Selected projects</span>
-        </h2>
-      </div>
-
-      <div class="portfolio-grid" id="portfolioGrid">
-        <!-- Row 1 -->
-        <div class="portfolio-item reveal" data-type="image">
-          <img class="portfolio-thumb" src="img/portfolio-1.png" alt="Luna Cosmetics" loading="lazy">
-          <div class="portfolio-overlay">
-            <span class="tag">AI Photo</span>
-            <h3>Luna Cosmetics</h3>
-            <p>
-              <span class="ua">Фотореалістичні product-шоти</span>
-              <span class="en">Photorealistic product shots</span>
-            </p>
-          </div>
-        </div>
-        <div class="portfolio-item film-frame reveal" data-type="video">
-          <video class="portfolio-thumb" src="видео/1219.mp4" muted loop playsinline preload="metadata"></video>
-          <div class="play-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="#8C7E6F" stroke="none"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-          </div>
-          <div class="portfolio-overlay">
-            <span class="tag">AI Video</span>
-            <h3>Neon Dreams</h3>
-            <p>
-              <span class="ua">Рекламний ролик для fashion-бренду</span>
-              <span class="en">Ad spot for a fashion brand</span>
-            </p>
-          </div>
-        </div>
-        <div class="portfolio-item reveal" data-type="image">
-          <img class="portfolio-thumb" src="img/portfolio-2.jpg" alt="Verdant Studio" loading="lazy">
-          <div class="portfolio-overlay">
-            <span class="tag">AI Photo</span>
-            <h3>Verdant Studio</h3>
-            <p>
-              <span class="ua">AI-візуалізація для архітектурного бюро</span>
-              <span class="en">AI visualization for an architecture firm</span>
-            </p>
-          </div>
-        </div>
-        <!-- Row 2 -->
-        <div class="portfolio-item film-frame reveal" data-type="video">
-          <video class="portfolio-thumb" src="видео/1229(1)-1.mp4" muted loop playsinline preload="metadata"></video>
-          <div class="play-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="#8C7E6F" stroke="none"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-          </div>
-          <div class="portfolio-overlay">
-            <span class="tag">AI Video</span>
-            <h3>TechVault</h3>
-            <p>
-              <span class="ua">Серія роликів для запуску гаджетів</span>
-              <span class="en">Video series for a gadget launch</span>
-            </p>
-          </div>
-        </div>
-        <div class="portfolio-item reveal" data-type="image">
-          <img class="portfolio-thumb" src="img/portfolio-1.png" alt="FitZone" loading="lazy">
-          <div class="portfolio-overlay">
-            <span class="tag">AI Photo</span>
-            <h3>FitZone</h3>
-            <p>
-              <span class="ua">Візуальний контент для фітнес-бренду</span>
-              <span class="en">Visual content for a fitness brand</span>
-            </p>
-          </div>
-        </div>
-        <div class="portfolio-item film-frame reveal" data-type="video">
-          <video class="portfolio-thumb" src="видео/вилла.mp4" muted loop playsinline preload="metadata"></video>
-          <div class="play-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="#8C7E6F" stroke="none"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-          </div>
-          <div class="portfolio-overlay">
-            <span class="tag">AI Video</span>
-            <h3>CloudBase</h3>
-            <p>
-              <span class="ua">Відеопрезентація SaaS-платформи</span>
-              <span class="en">Video presentation for a SaaS platform</span>
-            </p>
-          </div>
-        </div>
-        <!-- Row 3 -->
-        <div class="portfolio-item reveal" data-type="image">
-          <img class="portfolio-thumb" src="img/portfolio-2.jpg" alt="Apex Digital" loading="lazy">
-          <div class="portfolio-overlay">
-            <span class="tag">AI Photo</span>
-            <h3>Apex Digital</h3>
-            <p>
-              <span class="ua">Креативи для рекламних кампаній</span>
-              <span class="en">Creatives for ad campaigns</span>
-            </p>
-          </div>
-        </div>
-        <div class="portfolio-item film-frame reveal" data-type="video">
-          <video class="portfolio-thumb" src="видео/финал.mp4" muted loop playsinline preload="metadata"></video>
-          <div class="play-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="#8C7E6F" stroke="none"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-          </div>
-          <div class="portfolio-overlay">
-            <span class="tag">AI Video</span>
-            <h3>Fashion Nova</h3>
-            <p>
-              <span class="ua">Ролик для Instagram та TikTok</span>
-              <span class="en">Ad spot for Instagram and TikTok</span>
-            </p>
-          </div>
-        </div>
-        <div class="portfolio-item reveal" data-type="image">
-          <img class="portfolio-thumb" src="img/portfolio-1.png" alt="Orbita" loading="lazy">
-          <div class="portfolio-overlay">
-            <span class="tag">AI Photo</span>
-            <h3>Orbita</h3>
-            <p>
-              <span class="ua">Брендинг та візуали для стартапу</span>
-              <span class="en">Branding and visuals for a startup</span>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PROCESS ===== -->
-  <section id="process">
-    <div class="container">
-      <div class="section-header reveal">
-        <div class="section-label">
-          <span class="ua">Процес</span>
-          <span class="en">Process</span>
-        </div>
-        <h2 class="section-title">
-          <span class="ua">Як ми працюємо</span>
-          <span class="en">How we work</span>
-        </h2>
-      </div>
-      <div class="process-grid">
-        <div class="process-step reveal">
-          <h3>
-            <span class="ua">Брифінг</span>
-            <span class="en">Briefing</span>
-          </h3>
-          <p>
-            <span class="ua">Визначаємо ваші потреби, цілі та розробляємо креативний напрямок для відео- та фотопродакшну разом з вами.</span>
-            <span class="en">We identify your needs, define your goals, and develop the creative direction for video and photo production with you.</span>
-          </p>
-        </div>
-        <div class="process-step reveal">
-          <h3>
-            <span class="ua">Стратегія</span>
-            <span class="en">Strategy</span>
-          </h3>
-          <p>
-            <span class="ua">Від окремих одиниць контенту до повної стратегії — ми плануємо, створюємо та супроводжуємо ваш контент-продакшн з AI.</span>
-            <span class="en">From single content pieces to full strategy — we plan, build, and support your content production with AI.</span>
-          </p>
-        </div>
-        <div class="process-step reveal">
-          <h3>
-            <span class="ua">Створення та запуск</span>
-            <span class="en">Create &amp; Launch</span>
-          </h3>
-          <p>
-            <span class="ua">Ми створюємо, ви затверджуєте — ми доставляємо результат, що відповідає вашим цілям, вчасно.</span>
-            <span class="en">We create, you approve — we deliver a result aligned with your goals on time.</span>
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== CTA ===== -->
-  <section class="cta-section" id="contact">
-    <div class="cta-bg"></div>
-    <div class="container" style="position:relative;z-index:2;">
-      <h2 class="section-title reveal">
-        <span class="ua">Давайте працювати разом</span>
-        <span class="en">Let's Work Together</span>
-      </h2>
-      <p class="section-subtitle reveal">
-        <span class="ua">Розкажіть нам свою візію — ми розробимо стратегію та перетворимо її на вражаючий AI-контент.</span>
-        <span class="en">Tell us your vision — we'll craft the strategy and transform it into impactful AI-powered content.</span>
-      </p>
-      <div class="cta-buttons reveal">
-        <a href="mailto:hello@aivory.agency" class="btn-primary">
-          <span class="ua">Написати нам</span>
-          <span class="en">Get in Touch</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-      <div class="cta-contacts reveal">
-        <span>hello@aivory.agency</span>
-        <span>aivory.agency</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== FOOTER ===== -->
-  <footer>
-    <div class="container">
-      <div class="footer-inner">
-        <img src="img/aivory_logo.png" alt="aivory" class="footer-logo-img">
-        <div class="footer-center">
-          <span class="ua">&copy; 2026 aivory. Усі права захищені.</span>
-          <span class="en">&copy; 2026 aivory. All rights reserved.</span>
-        </div>
-        <div class="footer-socials">
-          <a href="https://t.me/aivory_agency" target="_blank" rel="noopener" aria-label="Telegram">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 1 0 24 12.056 12.01 12.01 0 0 0 11.944 0Zm5.635 8.098-1.762 8.304c-.133.59-.48.733-.973.456l-2.688-1.98-1.297 1.248c-.144.144-.264.264-.54.264l.192-2.736 4.98-4.5c.216-.192-.048-.3-.336-.108l-6.156 3.876-2.652-.828c-.576-.18-.588-.576.12-.852l10.368-3.996c.48-.174.9.108.744.852Z"/></svg>
-          </a>
-          <a href="https://instagram.com/aivory.agency" target="_blank" rel="noopener" aria-label="Instagram">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- ===== LIGHTBOX ===== -->
-  <div class="lightbox" id="lightbox">
-    <button class="lightbox-close" id="lightboxClose">&times;</button>
-    <div class="lightbox-content" id="lightboxContent"></div>
+  <!-- ===== MAIN CONTENT ===== -->
+  <div class="container">
+    <p class="under-construction">Website is under construction</p>
+    <img src="img/aivory_logo.png" alt="aivory — creative ai agency" class="logo">
+    <p class="tagline">Where Ideas Become AI Solutions.<br>From Concept to Final Content.</p>
   </div>
 
   <script>
-    // ===== LANGUAGE SWITCH =====
-    const langButtons = document.querySelectorAll('.lang-switch button');
-    langButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const lang = btn.dataset.lang;
-        document.body.className = 'lang-' + lang;
-        langButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      });
+    // Strip arrows scroll
+    const strip = document.getElementById('previewStrip');
+    document.getElementById('stripLeft').addEventListener('click', () => { strip.scrollBy({ left: -200, behavior: 'smooth' }); });
+    document.getElementById('stripRight').addEventListener('click', () => { strip.scrollBy({ left: 200, behavior: 'smooth' }); });
+
+    // Drag to scroll
+    let isDragging = false, startX, scrollLeft;
+    strip.addEventListener('mousedown', (e) => { isDragging = true; startX = e.pageX - strip.offsetLeft; scrollLeft = strip.scrollLeft; });
+    strip.addEventListener('mouseleave', () => isDragging = false);
+    strip.addEventListener('mouseup', () => isDragging = false);
+    strip.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      strip.scrollLeft = scrollLeft - (e.pageX - strip.offsetLeft - startX);
     });
 
-    // ===== NAVBAR SCROLL =====
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 50);
-    });
-
-    // ===== MOBILE MENU =====
-    const menuToggle = document.getElementById('menuToggle');
-    const navLinks = document.getElementById('navLinks');
-    menuToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => navLinks.classList.remove('active'));
-    });
-
-    // ===== SCROLL REVEAL =====
-    const revealElements = document.querySelectorAll('.reveal');
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => entry.target.classList.add('visible'), i * 80);
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-    revealElements.forEach(el => revealObserver.observe(el));
-
-    // ===== CUSTOM CURSOR =====
-    const cursorDot = document.getElementById('cursorDot');
-    const cursorRing = document.getElementById('cursorRing');
-    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
-
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      cursorDot.style.left = mouseX - 3 + 'px';
-      cursorDot.style.top = mouseY - 3 + 'px';
-    });
-    function animateRing() {
-      ringX += (mouseX - ringX) * 0.15;
-      ringY += (mouseY - ringY) * 0.15;
-      cursorRing.style.left = ringX - 18 + 'px';
-      cursorRing.style.top = ringY - 18 + 'px';
-      requestAnimationFrame(animateRing);
-    }
-    animateRing();
-
-    document.querySelectorAll('a, button, .portfolio-item, .service-card').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursorRing.style.transform = 'scale(1.5)';
-        cursorRing.style.borderColor = 'rgba(140,126,111,0.7)';
-      });
-      el.addEventListener('mouseleave', () => {
-        cursorRing.style.transform = 'scale(1)';
-        cursorRing.style.borderColor = 'rgba(140,126,111,0.4)';
-      });
-    });
-
-    // ===== VIDEO HOVER PLAY =====
-    document.querySelectorAll('.portfolio-item[data-type="video"]').forEach(item => {
-      const video = item.querySelector('video');
+    // Hover play for video cards
+    strip.querySelectorAll('.preview-card.film-strip').forEach(card => {
+      const video = card.querySelector('video');
       if (!video) return;
-      item.addEventListener('mouseenter', () => {
-        video.play().catch(() => {});
-        const icon = item.querySelector('.play-icon');
-        if (icon) icon.style.opacity = '0';
-      });
-      item.addEventListener('mouseleave', () => {
-        video.pause();
-        video.currentTime = 0;
-        const icon = item.querySelector('.play-icon');
-        if (icon) icon.style.opacity = '1';
-      });
-    });
-
-    // ===== BUILD PREVIEW STRIP FROM PORTFOLIO =====
-    (function() {
-      const strip = document.getElementById('previewStrip');
-      const portfolioItems = document.querySelectorAll('#portfolioGrid .portfolio-item');
-
-      portfolioItems.forEach(item => {
-        const type = item.dataset.type;
-        const card = document.createElement('div');
-        card.className = 'preview-card' + (type === 'video' ? ' film-strip' : '');
-        card.style.cursor = 'pointer';
-
-        if (type === 'video') {
-          const src = item.querySelector('video')?.getAttribute('src');
-          if (src) card.innerHTML = `<video src="${src}" muted preload="metadata"></video>`;
-        } else {
-          const src = item.querySelector('img')?.getAttribute('src');
-          if (src) card.innerHTML = `<img src="${src}" alt="" loading="lazy">`;
-        }
-
-        card.addEventListener('click', () => {
-          if (hasDragged) return;
-          item.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-
-        strip.appendChild(card);
-      });
-
-      // Hover play for video cards in strip
-      strip.querySelectorAll('.preview-card.film-strip').forEach(card => {
-        const video = card.querySelector('video');
-        if (!video) return;
-        card.addEventListener('mouseenter', () => video.play().catch(() => {}));
-        card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
-      });
-
-      // Drag to scroll
-      let isDragging = false, hasDragged = false, startX, scrollLeft;
-
-      strip.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        hasDragged = false;
-        startX = e.pageX - strip.offsetLeft;
-        scrollLeft = strip.scrollLeft;
-      });
-      strip.addEventListener('mouseleave', () => { isDragging = false; strip.classList.remove('dragging'); });
-      strip.addEventListener('mouseup', () => { isDragging = false; strip.classList.remove('dragging'); setTimeout(() => { hasDragged = false; }, 0); });
-      strip.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        hasDragged = true;
-        strip.classList.add('dragging');
-        e.preventDefault();
-        const x = e.pageX - strip.offsetLeft;
-        strip.scrollLeft = scrollLeft - (x - startX);
-      });
-
-      // Arrow buttons
-      const leftBtn = document.getElementById('stripLeft');
-      const rightBtn = document.getElementById('stripRight');
-      leftBtn.addEventListener('click', () => { strip.scrollBy({ left: -200, behavior: 'smooth' }); });
-      rightBtn.addEventListener('click', () => { strip.scrollBy({ left: 200, behavior: 'smooth' }); });
-    })();
-
-    // ===== LIGHTBOX =====
-    const lightbox = document.getElementById('lightbox');
-    const lightboxContent = document.getElementById('lightboxContent');
-    const lightboxClose = document.getElementById('lightboxClose');
-
-    function openLightbox(item) {
-      const type = item.dataset.type;
-      const title = item.querySelector('.portfolio-overlay h3')?.textContent || '';
-      const desc = item.querySelector('.portfolio-overlay p')?.textContent || '';
-      let mediaHtml = '';
-
-      if (type === 'video') {
-        const videoSrc = item.querySelector('video')?.src;
-        if (!videoSrc) return;
-        mediaHtml = `<video src="${videoSrc}" controls autoplay style="max-width:90vw;max-height:90vh;border-radius:12px;display:block;"></video>`;
-      } else {
-        const imgSrc = item.querySelector('img')?.src;
-        if (!imgSrc) return;
-        mediaHtml = `<img src="${imgSrc}" alt="${title}" style="max-width:90vw;max-height:90vh;border-radius:12px;display:block;">`;
-      }
-
-      lightboxContent.innerHTML = mediaHtml +
-        `<div class="lightbox-info"><h3>${title}</h3><p>${desc}</p></div>`;
-      lightbox.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeLightbox() {
-      lightbox.classList.remove('active');
-      document.body.style.overflow = '';
-      const vid = lightboxContent.querySelector('video');
-      if (vid) vid.pause();
-      setTimeout(() => { lightboxContent.innerHTML = ''; }, 300);
-    }
-
-    document.querySelectorAll('.portfolio-item').forEach(item => {
-      item.addEventListener('click', () => openLightbox(item));
-    });
-
-    lightboxClose.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
-    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
-
-    // ===== SMOOTH ANCHOR =====
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+      card.addEventListener('mouseenter', () => video.play().catch(() => {}));
+      card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
     });
   </script>
 </body>
