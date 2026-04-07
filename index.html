@@ -1207,6 +1207,7 @@
         }
 
         card.addEventListener('click', () => {
+          if (hasDragged) return;
           item.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
 
@@ -1222,18 +1223,20 @@
       });
 
       // Drag to scroll
-      let isDragging = false, startX, scrollLeft;
+      let isDragging = false, hasDragged = false, startX, scrollLeft;
 
       strip.addEventListener('mousedown', (e) => {
         isDragging = true;
-        strip.classList.add('dragging');
+        hasDragged = false;
         startX = e.pageX - strip.offsetLeft;
         scrollLeft = strip.scrollLeft;
       });
       strip.addEventListener('mouseleave', () => { isDragging = false; strip.classList.remove('dragging'); });
-      strip.addEventListener('mouseup', () => { isDragging = false; strip.classList.remove('dragging'); });
+      strip.addEventListener('mouseup', () => { isDragging = false; strip.classList.remove('dragging'); setTimeout(() => { hasDragged = false; }, 0); });
       strip.addEventListener('mousemove', (e) => {
         if (!isDragging) return;
+        hasDragged = true;
+        strip.classList.add('dragging');
         e.preventDefault();
         const x = e.pageX - strip.offsetLeft;
         strip.scrollLeft = scrollLeft - (x - startX);
