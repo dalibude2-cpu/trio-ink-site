@@ -190,7 +190,7 @@ window.CONTENT = {
      "rowStart": true
     },
     {
-     "id": "poket_buk_layf_tram_2_precise_starlight_2_5",
+     "id": "poket_buk_layf_tram_9x16_final_1",
      "span": 4,
      "ar": "9/16"
     },
