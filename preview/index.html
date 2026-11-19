@@ -154,6 +154,8 @@ figcaption .m{white-space:nowrap}
 .cmp .h::after{content:"↔";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;background:var(--ivory);color:var(--bg);display:grid;place-items:center;font-size:16px}
 .cmp .l,.cmp .r{position:absolute;top:16px;padding:5px 9px;background:rgba(20,17,14,.6);border-radius:3px;color:var(--ivory)}
 .cmp .l{left:16px}.cmp .r{right:16px}
+.cmp .p{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);padding:7px 14px;background:rgba(20,17,14,.6);border:1px solid rgba(242,237,227,.35);border-radius:40px;color:var(--ivory);cursor:pointer;white-space:nowrap;transition:background .3s,color .3s}
+.cmp .p:hover{background:var(--ivory);color:var(--bg)}
 @media(max-width:860px){.sm .txt,.cmp{grid-column:1/-1}}
 
 /* ===== PROCESS ===== */
@@ -422,7 +424,7 @@ let html='';
   html+=`</div>`;
   if(i===0&&C.compare&&CAT[C.compare]){const m=M(C.compare);
     html+=`<div class="sm"><div class="txt"><span class="mono">(how it moves)</span><h3>Every film starts <em>as a frame</em></h3><p>We build the still first — light, composition, product accuracy — and only then bring it to life. Drag to see the same shot as a frame and as motion.</p></div>
-    <div class="cmp" id="cmp" style="aspect-ratio:${m.w}/${m.h}"><video src="${m.video}" muted loop playsinline autoplay></video><img src="${m.poster}" alt=""><div class="h"></div><span class="l mono">frame</span><span class="r mono">motion</span></div></div>`;}
+    <div class="cmp" id="cmp" style="aspect-ratio:${m.w}/${m.h}"><video src="${m.video}" muted loop playsinline autoplay></video><img src="${m.poster}" alt=""><div class="h"></div><span class="l mono">frame</span><span class="r mono">motion</span><span class="p mono">▶ watch</span></div></div>`;}
 });
 $('#chapters').innerHTML=html||'<div class="empty mono">no chapters yet — open curator.html</div>';
 $('#chapters').addEventListener('click',e=>{const b=e.target.closest('.more-btn');if(!b)return;
@@ -483,6 +485,7 @@ document.addEventListener('click',e=>{
   const f=e.target.closest('figure.dn');
   if(f){const t=f.querySelector('figcaption .t'),m=f.querySelector('figcaption .m');
     openLB({video:f.dataset.video,poster:f.dataset.src,img:f.dataset.src,title:t?t.innerHTML:'',meta:m?m.textContent:''});return;}
+  if(e.target.closest('.cmp')&&C.compare&&CAT[C.compare]){const r=M(C.compare);openLB({video:r.video,poster:r.poster,title:r.t+(r.client?'<small>'+r.client+'</small>':''),meta:fmtDur(r.dur)});return;}
   if(e.target.closest('.reel')&&C.reel&&CAT[C.reel]){const r=M(C.reel);openLB({video:r.video,poster:r.poster,title:'Showreel <small>'+r.t+'</small>',meta:fmtDur(r.dur)});}
 });
 
