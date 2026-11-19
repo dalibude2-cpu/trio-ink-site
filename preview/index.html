@@ -183,6 +183,17 @@ footer img{height:26px}
 .cur.big{width:74px;height:74px;margin:-37px 0 0 -37px}
 .cur.big span{opacity:1}
 @media(pointer:coarse){.cur{display:none}figure.w{cursor:auto}}
+/* ===== LIGHTBOX: click a work → full view, video with sound ===== */
+.lb{position:fixed;inset:0;z-index:97;background:rgba(10,8,6,.95);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .35s;cursor:auto}
+.lb.on{opacity:1;pointer-events:auto}
+.lb .box{display:flex;align-items:center;justify-content:center;transform:scale(.97);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.lb.on .box{transform:none}
+.lb video,.lb img{display:block;max-width:calc(100vw - 2*var(--pad));max-height:calc(100svh - 130px);width:auto;height:auto;border-radius:4px;background:#000}
+.lb .x{position:absolute;top:20px;right:var(--pad);background:none;border:1px solid rgba(242,237,227,.4);color:var(--ivory);padding:9px 18px;border-radius:40px;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.lb .x:hover{background:var(--ivory);color:var(--bg)}
+.lb .cap{position:absolute;left:var(--pad);right:var(--pad);bottom:22px;display:flex;justify-content:space-between;gap:16px;font-size:15px}
+.lb .cap small{color:var(--muted);margin-left:8px;font-size:13px}
+figure.dn,.reel{cursor:pointer}
 
 .badge{position:fixed;right:14px;bottom:14px;z-index:60;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;background:var(--ivory);color:var(--bg);padding:6px 10px;border-radius:3px}
 
@@ -452,6 +463,28 @@ document.querySelectorAll('video').forEach(v=>vio.observe(v));
 const reel=$('.reel');new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){reel.classList.add('in');reel.querySelector('video').play().catch(()=>{});}}),{threshold:.3}).observe(reel);
 // process lines
 document.querySelectorAll('.step').forEach(s=>new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){s.classList.add('in');o.disconnect();}}),{threshold:.4}).observe(s));
+
+/* lightbox: click a work → full view; video plays with sound and controls */
+const lb=document.createElement('div');lb.className='lb';lb.setAttribute('role','dialog');lb.setAttribute('aria-modal','true');
+lb.innerHTML='<button class="x" aria-label="Close">close ×</button><div class="box"></div><div class="cap"><span class="t"></span><span class="mono m"></span></div>';
+document.body.appendChild(lb);
+const lbBox=lb.querySelector('.box');let lbPaused=[];
+function openLB(o){
+  lbPaused=[...document.querySelectorAll('video')].filter(v=>!v.paused);lbPaused.forEach(v=>v.pause());
+  if(o.video){const v=document.createElement('video');v.src=o.video;if(o.poster)v.poster=o.poster;v.controls=true;v.playsInline=true;v.autoplay=true;v.muted=false;lbBox.replaceChildren(v);v.play().catch(()=>{v.muted=true;v.play().catch(()=>{});});}
+  else{const im=document.createElement('img');im.src=o.img;im.alt=o.title||'';lbBox.replaceChildren(im);}
+  lb.querySelector('.cap .t').innerHTML=o.title||'';lb.querySelector('.cap .m').textContent=o.meta||'';
+  lb.classList.add('on');document.body.style.overflow='hidden';cur.classList.remove('big');}
+function closeLB(){if(!lb.classList.contains('on'))return;lb.classList.remove('on');document.body.style.overflow='';
+  setTimeout(()=>lbBox.replaceChildren(),350);lbPaused.forEach(v=>v.play().catch(()=>{}));lbPaused=[];}
+lb.addEventListener('click',e=>{if(e.target===lb||e.target===lbBox||e.target.closest('.x'))closeLB();});
+addEventListener('keydown',e=>{if(e.key==='Escape')closeLB();});
+document.addEventListener('click',e=>{
+  const f=e.target.closest('figure.dn');
+  if(f){const t=f.querySelector('figcaption .t'),m=f.querySelector('figcaption .m');
+    openLB({video:f.dataset.video,poster:f.dataset.src,img:f.dataset.src,title:t?t.innerHTML:'',meta:m?m.textContent:''});return;}
+  if(e.target.closest('.reel')&&C.reel&&CAT[C.reel]){const r=M(C.reel);openLB({video:r.video,poster:r.poster,title:'Showreel <small>'+r.t+'</small>',meta:fmtDur(r.dur)});}
+});
 
 /* marquee driven by scroll */
 const track=$('#track');let mx=0;

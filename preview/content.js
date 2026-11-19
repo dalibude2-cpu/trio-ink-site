@@ -104,7 +104,7 @@ window.CONTENT = {
      "rowStart": true
     },
     {
-     "id": "inkposter_gemini_generated_image_okk139okk139okk1",
+     "id": "inkposter_novye_email_2026_004_04_block3_right_600x900",
      "span": 4,
      "ar": "9/16"
     },
@@ -120,7 +120,7 @@ window.CONTENT = {
      "rowStart": true
     },
     {
-     "id": "inkposter_dyuna_artdeco_white_portrait_light_12a8682_v1",
+     "id": "inkposter_dyuna_kitchen_artdeco_brown_v1",
      "span": 4,
      "ar": "4/5"
     },
@@ -245,5 +245,10 @@ window.CONTENT = {
    ]
   }
  ],
- "meta": {}
+ "meta": {
+  "inkposter_novye_hospitality_lobby_edit01_guests_reception_bg_v8_nanoba": {
+   "t": "hospitality lobby ",
+   "client": "Inkposter"
+  }
+ }
 };
