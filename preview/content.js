@@ -195,7 +195,7 @@ window.CONTENT = {
      "ar": "9/16"
     },
     {
-     "id": "poket_buk_layf_juice_final_4k",
+     "id": "poket_buk_layf_juice_final_4k_sub",
      "span": 4,
      "ar": "9/16"
     }
