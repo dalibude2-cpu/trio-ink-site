@@ -471,7 +471,7 @@ document.body.appendChild(lb);
 const lbBox=lb.querySelector('.box');let lbPaused=[];
 function openLB(o){
   lbPaused=[...document.querySelectorAll('video')].filter(v=>!v.paused);lbPaused.forEach(v=>v.pause());
-  if(o.video){const v=document.createElement('video');v.src=o.video;if(o.poster)v.poster=o.poster;v.controls=true;v.playsInline=true;v.autoplay=true;v.muted=false;lbBox.replaceChildren(v);v.play().catch(()=>{v.muted=true;v.play().catch(()=>{});});}
+  if(o.video){const v=document.createElement('video');v.src=o.video;if(o.poster)v.poster=o.poster;v.controls=true;v.playsInline=true;v.autoplay=true;v.muted=false;lbBox.replaceChildren(v);v.play().catch(()=>{});}
   else{const im=document.createElement('img');im.src=o.img;im.alt=o.title||'';lbBox.replaceChildren(im);}
   lb.querySelector('.cap .t').innerHTML=o.title||'';lb.querySelector('.cap .m').textContent=o.meta||'';
   lb.classList.add('on');document.body.style.overflow='hidden';cur.classList.remove('big');}
